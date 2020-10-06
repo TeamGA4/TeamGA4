@@ -5,6 +5,7 @@ void main()
 {
 	printf_s("こんにちは\n");
 	printf_s("さようなら\n");
+	printf_s("サラダバー\n");
 
 
 	_getch();
