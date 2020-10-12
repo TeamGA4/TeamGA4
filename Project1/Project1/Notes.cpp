@@ -26,14 +26,25 @@ void Notes::Action()
 {
 	pos.y += notes_speed;
 
-	if (pos.y > WINDOW_VERTICAL)
+	if (pos.y > WINDOW_VERTICAL&&notes_type == 1 ||
+		pos.y - notes_speed * notes_length > WINDOW_VERTICAL&&notes_type == 2)
 		delete_flg = true;
 }
 
 //ドロー
 void Notes::Draw()
 {
-	DrawLine(pos.x + 60, pos.y, pos.x + 150, pos.y, GetColor(0, 255, 0));
+	switch (notes_type)
+	{
+	case 1:
+		DrawLine(pos.x + 60, pos.y, pos.x + 150, pos.y, GetColor(0, 255, 0));
+		break;
+	case 2:
+		DrawBox(pos.x + 60, pos.y - notes_speed * notes_length, pos.x + 150, pos.y, GetColor(255, 255, 0), TRUE);
+		break;
+	default:
+		break;
+	}
 }
 
 //消去フラグ取得関数

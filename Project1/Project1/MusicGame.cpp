@@ -53,7 +53,7 @@ void MusicGame::Action()
 	{
 		if (elapsed_flame == (*i)->flame - 780 / notes_speed + 120)
 		{
-			a = new Notes((*i)->lane, notes_speed, (*i)->type, (*i)->length);
+			a = new Notes((*i)->lane, notes_speed, (*i)->type, (*i)->length - (*i)->flame);
 			notes.push_back(a);
 		}
 	}
