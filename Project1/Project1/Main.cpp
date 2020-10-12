@@ -23,8 +23,8 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	//描画先の変更
 	SetDrawScreen(DX_SCREEN_BACK);
 
-	char music_name[] = "Sample";
-	MusicGame* music_game = new MusicGame(music_name, 9);
+	char music_name[] = "Battle";
+	MusicGame* music_game = new MusicGame(music_name, 18);
 
 	//メインループ
 	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
