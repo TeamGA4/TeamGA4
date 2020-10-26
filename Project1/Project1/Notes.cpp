@@ -4,7 +4,7 @@
 Notes::Notes(int lane, int speed, int type, float length)
 {
 	//ノーツ出現レーン設定
-	pos.x = --lane * 90;
+	pos.x = --lane * 90 + 380;
 	pos.y = 780;
 	do { pos.y -= speed; } while (pos.y > 0);
 
@@ -37,14 +37,41 @@ void Notes::Draw()
 	switch (notes_type)
 	{
 	case 1:
-		DrawLine(pos.x + 60, pos.y, pos.x + 150, pos.y, GetColor(0, 255, 0));
+		DrawLine(pos.x, pos.y, pos.x + 90, pos.y, GetColor(0, 255, 0));
 		break;
 	case 2:
-		DrawBox(pos.x + 60, pos.y - notes_speed * notes_length, pos.x + 150, pos.y, GetColor(255, 255, 0), TRUE);
+		DrawBox(pos.x, pos.y - notes_speed * notes_length, pos.x + 90, pos.y, GetColor(255, 255, 0), TRUE);
+		break;
+	case 3:
+		DrawLine(pos.x, pos.y, pos.x + 90, pos.y, GetColor(255, 0, 255));
 		break;
 	default:
 		break;
 	}
+}
+
+//ノーツ座標取得関数
+Pos Notes::GetNotesPos()
+{
+	return pos;
+}
+
+//ノーツタイプ取得関数
+int Notes::GetNotesType()
+{
+	return notes_type;
+}
+
+//ロングノーツの長さ取得関数
+float Notes::GetNotesLength()
+{
+	return notes_length;
+}
+
+//消去フラグ設定関数
+void Notes::SetDeleteFlg(bool flg)
+{
+	delete_flg = flg;
 }
 
 //消去フラグ取得関数

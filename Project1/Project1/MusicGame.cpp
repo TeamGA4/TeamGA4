@@ -35,7 +35,19 @@ MusicGame::MusicGame(char name[], int speed)
 	elapsed_flame = 0;
 
 	//Šy‹Èî•ñ‚ð“Ç‚Ýž‚Ý
-	LoadMusic(music_name);
+	LoadMusicNotes(music_name);
+
+	//”»’è‚ÌƒeƒLƒXƒg‰Šú‰»
+	strcpy(judg_txt, "\0");
+
+	//”»’è‚ÌƒeƒLƒXƒg•\Ž¦ŽžŠÔ‰Šú‰»
+	judg_txt_time = 0;
+
+	//ƒL[’·‰Ÿ‚µ§Œä‰Šú‰»
+	longpush_ctrl[0] = false;
+	longpush_ctrl[1] = false;
+	longpush_ctrl[2] = false;
+	longpush_ctrl[3] = false;
 }
 
 //ƒAƒNƒVƒ‡ƒ“
@@ -61,9 +73,55 @@ void MusicGame::Action()
 	//ƒm[ƒc‚Ìˆ—
 	for (auto i = notes.begin(); i != notes.end(); i++)
 	{
+		//“ü—Íˆ—
+
+		Pos notes_pos = (*i)->GetNotesPos(); //ƒm[ƒc‚ÌÀ•WŽæ“¾
+
+		//D(1—ñ–Ú)‚ª“ü—Í‚³‚ê‚½Žž
+		if (CheckHitKey(KEY_INPUT_D) == true)
+			if (PushNotesButton((*i)->GetNotesPos(), (*i)->GetNotesType(), 0) == true)
+				(*i)->SetDeleteFlg(true);
+		else
+			if (ReleaseNotesButton((*i)->GetNotesPos(), (*i)->GetNotesLength(), (*i)->GetNotesType(), 0) == true)
+				(*i)->SetDeleteFlg(true);
+
+		//F(2—ñ–Ú)‚ª“ü—Í‚³‚ê‚½Žž
+		if (CheckHitKey(KEY_INPUT_F) == true)
+			if (PushNotesButton((*i)->GetNotesPos(), (*i)->GetNotesType(), 1) == true)
+				(*i)->SetDeleteFlg(true);
+		else
+			if (ReleaseNotesButton((*i)->GetNotesPos(), (*i)->GetNotesLength(), (*i)->GetNotesType(), 1) == true)
+				(*i)->SetDeleteFlg(true);
+
+		//J(3—ñ–Ú)‚ª“ü—Í‚³‚ê‚½Žž
+		if (CheckHitKey(KEY_INPUT_J) == true)
+			if (PushNotesButton((*i)->GetNotesPos(), (*i)->GetNotesType(), 2) == true)
+				(*i)->SetDeleteFlg(true);
+		else
+			if (ReleaseNotesButton((*i)->GetNotesPos(), (*i)->GetNotesLength(), (*i)->GetNotesType(), 2) == true)
+				(*i)->SetDeleteFlg(true);
+
+		//K(4—ñ–Ú)‚ª“ü—Í‚³‚ê‚½Žž
+		if (CheckHitKey(KEY_INPUT_K) == true)
+			if (PushNotesButton((*i)->GetNotesPos(), (*i)->GetNotesType(), 3) == true)
+				(*i)->SetDeleteFlg(true);
+		else
+			if (ReleaseNotesButton((*i)->GetNotesPos(), (*i)->GetNotesLength(), (*i)->GetNotesType(), 3) == true)
+				(*i)->SetDeleteFlg(true);
+
 		(*i)->Action();
 		(*i)->Draw();
 	}
+
+	//ƒL[‚ª‰Ÿ‚³‚ê‚Ä‚¢‚È‚¢ê‡A’·‰Ÿ‚µ§Œä‰ðœ
+	if (CheckHitKey(KEY_INPUT_D) == false)
+		longpush_ctrl[0] = false;
+	if (CheckHitKey(KEY_INPUT_F) == false)
+		longpush_ctrl[1] = false;
+	if (CheckHitKey(KEY_INPUT_J) == false)
+		longpush_ctrl[2] = false;
+	if (CheckHitKey(KEY_INPUT_K) == false)
+		longpush_ctrl[3] = false;
 
 	//ƒm[ƒc‚ÌƒŠƒXƒg‚Ì®—
 	for (auto i = notes.begin(); i != notes.end(); i++)
@@ -80,25 +138,52 @@ void MusicGame::Action()
 //ƒhƒ[
 void MusicGame::Draw()
 {
+	//ƒtƒŒ[ƒ€”•\Ž¦
 	char time[256];
 	sprintf_s(time, 256, "%d", elapsed_flame);
 	DrawString(0, 0, time, GetColor(255, 0, 0));
 
-	DrawLine(60, 60, 420, 60, GetColor(255, 0, 0));
-	DrawLine(60, 240, 420, 240, GetColor(255, 0, 0));
-	DrawLine(60, 420, 420, 420, GetColor(255, 0, 0));
-	DrawLine(60, 600, 420, 600, GetColor(255, 0, 0));
-	DrawLine(60, 780, 420, 780, GetColor(255, 0, 0));
+	//‰¡ü
+	DrawLine(380, 60, 740, 60, GetColor(255, 0, 0));
+	DrawLine(380, 240, 740, 240, GetColor(255, 0, 0));
+	DrawLine(380, 420, 740, 420, GetColor(255, 0, 0));
+	DrawLine(380, 600, 740, 600, GetColor(255, 0, 0));
+	if (CheckHitKey(KEY_INPUT_D))
+		DrawLine(380, 780, 470, 780, GetColor(0, 255, 255));
+	else
+		DrawLine(380, 780, 470, 780, GetColor(255, 0, 0));
+	if (CheckHitKey(KEY_INPUT_F))
+		DrawLine(470, 780, 560, 780, GetColor(0, 255, 255));
+	else
+		DrawLine(470, 780, 560, 780, GetColor(255, 0, 0));
+	if (CheckHitKey(KEY_INPUT_J))
+		DrawLine(560, 780, 650, 780, GetColor(0, 255, 255));
+	else
+		DrawLine(560, 780, 650, 780, GetColor(255, 0, 0));
+	if (CheckHitKey(KEY_INPUT_K))
+		DrawLine(650, 780, 740, 780, GetColor(0, 255, 255));
+	else
+		DrawLine(650, 780, 740, 780, GetColor(255, 0, 0));
 
-	DrawLine(60, 0, 60, 840, GetColor(255, 0, 0));
-	DrawLine(150, 0, 150, 840, GetColor(255, 0, 0));
-	DrawLine(240, 0, 240, 840, GetColor(255, 0, 0));
-	DrawLine(330, 0, 330, 840, GetColor(255, 0, 0));
-	DrawLine(420, 0, 420, 840, GetColor(255, 0, 0));
+	//cü
+	DrawLine(380, 0, 380, 840, GetColor(255, 0, 0));
+	DrawLine(470, 0, 470, 840, GetColor(255, 0, 0));
+	DrawLine(560, 0, 560, 840, GetColor(255, 0, 0));
+	DrawLine(650, 0, 650, 840, GetColor(255, 0, 0));
+	DrawLine(740, 0, 740, 840, GetColor(255, 0, 0));
+
+	//”»’è•\Ž¦
+	DrawString(0, 16, judg_txt, GetColor(255, 0, 0));
+	judg_txt_time++;
+	if (judg_txt_time > 15)
+	{
+		strcpy(judg_txt, "\0");
+		judg_txt_time = 0;
+	}
 }
 
 //Šy‹Èî•ñ“Ç‚Ýž‚ÝŠÖ”(ˆø”@“Ç‚Ýž‚Þƒm[ƒcƒf[ƒ^‚Ì‹È–¼)
-void MusicGame::LoadMusic(char music_name[])
+void MusicGame::LoadMusicNotes(char music_name[])
 {
 	FILE *fp;
 	char fname[256] = "NotesData\\";
@@ -131,4 +216,82 @@ void MusicGame::LoadMusic(char music_name[])
 
 	//ƒtƒ@ƒCƒ‹‚ð•Â‚¶‚é
 	fclose(fp);
+}
+
+//ƒm[ƒc“ü—Íˆ—
+bool MusicGame::PushNotesButton(Pos notes_pos, unsigned int notes_type, int line)
+{
+	if ((int)notes_pos.x - 380 == line * 90 && longpush_ctrl[line] == false)
+	{
+		//GOOD”»’è
+		if (notes_pos.y >= 780 - notes_speed * 2 &&
+			notes_pos.y <= 780 + notes_speed * 2 ||
+			notes_type == 3 &&
+			notes_pos.y >= 780 - notes_speed * 4 &&
+			notes_pos.y <= 780 + notes_speed * 4)
+		{
+			strcpy(judg_txt, "‚f‚n‚n‚c");
+			judg_txt_time = 0;
+			if (notes_type != 2)
+				return true;
+		}
+		//NEAR”»’è
+		else if (notes_pos.y >= 780 - notes_speed * 4 &&
+			notes_pos.y <= 780 + notes_speed * 4)
+		{
+			strcpy(judg_txt, "‚m‚d‚`‚q");
+			judg_txt_time = 0;
+			if (notes_type != 2)
+				return true;
+		}
+		//MISS”»’è
+		else if (notes_pos.y >= 780 - notes_speed * 6 &&
+			notes_pos.y <= 780 + notes_speed * 6)
+		{
+			strcpy(judg_txt, "‚l‚h‚r‚r");
+			judg_txt_time = 0;
+			if (notes_type != 2)
+				return true;
+		}
+	}
+
+	longpush_ctrl[line] = true; //ƒL[’·‰Ÿ‚µ§Œä
+
+	return false;
+}
+
+//ƒm[ƒc“ü—Íˆ—(ƒƒ“ƒOƒm[ƒcAƒL[—£‚µ‚½Žž—p)
+bool MusicGame::ReleaseNotesButton(Pos notes_pos, float notes_length, unsigned int notes_type, int line)
+{
+	if ((int)notes_pos.x-380 == line*90 && longpush_ctrl[line] == true && notes_type == 2)
+	{
+		//GOOD”»’è
+		if (notes_pos.y - notes_speed * notes_length >= 780 - notes_speed * 2 &&
+			notes_pos.y - notes_speed * notes_length <= 780 + notes_speed * 2)
+		{
+			strcpy(judg_txt, "‚f‚n‚n‚c");
+			judg_txt_time = 0;
+			return true;
+		}
+		//NEAR”»’è
+		else if (notes_pos.y - notes_speed * notes_length >= 780 - notes_speed * 4 &&
+			notes_pos.y - notes_speed * notes_length <= 780 + notes_speed * 4)
+		{
+			strcpy(judg_txt, "‚m‚d‚`‚q");
+			judg_txt_time = 0;
+			return true;
+		}
+		//MISS”»’è
+		else if (notes_pos.y - notes_speed * notes_length >= 780 - notes_speed * 6 &&
+			notes_pos.y - notes_speed * notes_length <= 780 + notes_speed * 6)
+		{
+			strcpy(judg_txt, "‚l‚h‚r‚r");
+			judg_txt_time = 0;
+			return true;
+		}
+	}
+
+	longpush_ctrl[line] = false; //ƒL[’·‰Ÿ‚µ§Œä
+
+	return false;
 }
