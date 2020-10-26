@@ -24,7 +24,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	char music_name[] = "Battle";
-	MusicGame* music_game = new MusicGame(music_name, 18);
+	MusicGame* music_game = new MusicGame(music_name, 9);
 
 	//ÉÅÉCÉìÉãÅ[Év
 	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
