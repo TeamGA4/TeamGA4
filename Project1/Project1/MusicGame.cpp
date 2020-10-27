@@ -37,12 +37,13 @@ MusicGame::MusicGame(char name[], int speed)
 	//Šy‹Èî•ñ‚ğ“Ç‚İ‚İ
 	LoadMusicNotes(music_name);
 
-	//”»’è‚ÌƒeƒLƒXƒg‰Šú‰»
-	strcpy(judg_txt, "\0");
-
-	//”»’è‚ÌƒeƒLƒXƒg•\¦ŠÔ‰Šú‰»
-	judg_txt_time = 0;
-
+	//”»’è‚ÌƒeƒLƒXƒgî•ñ‰Šú‰»
+	for (int i = 0; i < 4; i++)
+	{
+		strcpy(judg_txt[i], "\0");
+		judg_txt_time[i] = 0;
+	}
+	
 	//ƒL[’·‰Ÿ‚µ§Œä‰Šú‰»
 	longpush_ctrl[0] = false;
 	longpush_ctrl[1] = false;
@@ -173,12 +174,15 @@ void MusicGame::Draw()
 	DrawLine(740, 0, 740, 840, GetColor(255, 0, 0));
 
 	//”»’è•\¦
-	DrawString(0, 16, judg_txt, GetColor(255, 0, 0));
-	judg_txt_time++;
-	if (judg_txt_time > 15)
+	for (int i = 0; i < 4; i++)
 	{
-		strcpy(judg_txt, "\0");
-		judg_txt_time = 0;
+		DrawString(390 + i * 90, 720, judg_txt[i], GetColor(255, 0, 0));
+		judg_txt_time[i]++;
+		if (judg_txt_time[i] > 15)
+		{
+			strcpy(judg_txt[i], "\0");
+			judg_txt_time[i] = 0;
+		}
 	}
 }
 
@@ -230,8 +234,8 @@ bool MusicGame::PushNotesButton(Pos notes_pos, unsigned int notes_type, int line
 			notes_pos.y >= 780 - notes_speed * 4 &&
 			notes_pos.y <= 780 + notes_speed * 4)
 		{
-			strcpy(judg_txt, "‚f‚n‚n‚c");
-			judg_txt_time = 0;
+			strcpy(judg_txt[line], "‚f‚n‚n‚c");
+			judg_txt_time[line] = 0;
 			if (notes_type != 2)
 				return true;
 		}
@@ -239,8 +243,8 @@ bool MusicGame::PushNotesButton(Pos notes_pos, unsigned int notes_type, int line
 		else if (notes_pos.y >= 780 - notes_speed * 4 &&
 			notes_pos.y <= 780 + notes_speed * 4)
 		{
-			strcpy(judg_txt, "‚m‚d‚`‚q");
-			judg_txt_time = 0;
+			strcpy(judg_txt[line], "‚m‚d‚`‚q");
+			judg_txt_time[line] = 0;
 			if (notes_type != 2)
 				return true;
 		}
@@ -248,8 +252,8 @@ bool MusicGame::PushNotesButton(Pos notes_pos, unsigned int notes_type, int line
 		else if (notes_pos.y >= 780 - notes_speed * 6 &&
 			notes_pos.y <= 780 + notes_speed * 6)
 		{
-			strcpy(judg_txt, "‚l‚h‚r‚r");
-			judg_txt_time = 0;
+			strcpy(judg_txt[line], "‚l‚h‚r‚r");
+			judg_txt_time[line] = 0;
 			if (notes_type != 2)
 				return true;
 		}
@@ -269,24 +273,24 @@ bool MusicGame::ReleaseNotesButton(Pos notes_pos, float notes_length, unsigned i
 		if (notes_pos.y - notes_speed * notes_length >= 780 - notes_speed * 2 &&
 			notes_pos.y - notes_speed * notes_length <= 780 + notes_speed * 2)
 		{
-			strcpy(judg_txt, "‚f‚n‚n‚c");
-			judg_txt_time = 0;
+			strcpy(judg_txt[line], "‚f‚n‚n‚c");
+			judg_txt_time[line] = 0;
 			return true;
 		}
 		//NEAR”»’è
 		else if (notes_pos.y - notes_speed * notes_length >= 780 - notes_speed * 4 &&
 			notes_pos.y - notes_speed * notes_length <= 780 + notes_speed * 4)
 		{
-			strcpy(judg_txt, "‚m‚d‚`‚q");
-			judg_txt_time = 0;
+			strcpy(judg_txt[line], "‚m‚d‚`‚q");
+			judg_txt_time[line] = 0;
 			return true;
 		}
 		//MISS”»’è
 		else if (notes_pos.y - notes_speed * notes_length >= 780 - notes_speed * 6 &&
 			notes_pos.y - notes_speed * notes_length <= 780 + notes_speed * 6)
 		{
-			strcpy(judg_txt, "‚l‚h‚r‚r");
-			judg_txt_time = 0;
+			strcpy(judg_txt[line], "‚l‚h‚r‚r");
+			judg_txt_time[line] = 0;
 			return true;
 		}
 	}

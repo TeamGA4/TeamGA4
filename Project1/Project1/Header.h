@@ -37,8 +37,8 @@ private:
 	int notes_speed; //ノーツ速度
 	int elapsed_flame; //楽曲経過時間(フレーム単位)
 
-	char judg_txt[9]; //判定のテキスト表示
-	int judg_txt_time; //判定のテキスト表示時間
+	char judg_txt[4][9]; //判定のテキスト表示
+	int judg_txt_time[4]; //判定のテキスト表示時間
 
 	bool longpush_ctrl[4]; //キー長押し制御
 public:
