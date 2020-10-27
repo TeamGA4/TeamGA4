@@ -7,7 +7,8 @@
 using namespace std;
 
 //メイン
-int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
+int WINAPI WinMain(HINSTANCE hInstance, 
+	HINSTANCE hPrevInstance, LPSTR lpCmdLine, int nCmdShow)
 {
 	//windowの設定
 
@@ -24,7 +25,7 @@ int WINAPI WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance, LPSTR lpCmdLine
 	SetDrawScreen(DX_SCREEN_BACK);
 
 	char music_name[] = "Battle";
-	MusicGame* music_game = new MusicGame(music_name, 18);
+	MusicGame* music_game = new MusicGame(music_name, 25);
 
 	//メインループ
 	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)

@@ -35,7 +35,20 @@ MusicGame::MusicGame(char name[], int speed)
 	elapsed_flame = 0;
 
 	//楽曲情報を読み込み
-	LoadMusic(music_name);
+	LoadMusicNotes(music_name);
+
+	//判定のテキスト情報初期化
+	for (int i = 0; i < 4; i++)
+	{
+		strcpy(judg_txt[i], "\0");
+		judg_txt_time[i] = 0;
+	}
+	
+	//キー長押し制御初期化
+	longpush_ctrl[0] = false;
+	longpush_ctrl[1] = false;
+	longpush_ctrl[2] = false;
+	longpush_ctrl[3] = false;
 }
 
 //アクション
@@ -61,9 +74,55 @@ void MusicGame::Action()
 	//ノーツの処理
 	for (auto i = notes.begin(); i != notes.end(); i++)
 	{
+		//入力処理
+
+		Pos notes_pos = (*i)->GetNotesPos(); //ノーツの座標取得
+
+		//D(1列目)が入力された時
+		if (CheckHitKey(KEY_INPUT_D) == true)
+			if (PushNotesButton((*i)->GetNotesPos(), (*i)->GetNotesType(), 0) == true)
+				(*i)->SetDeleteFlg(true);
+		else
+			if (ReleaseNotesButton((*i)->GetNotesPos(), (*i)->GetNotesLength(), (*i)->GetNotesType(), 0) == true)
+				(*i)->SetDeleteFlg(true);
+
+		//F(2列目)が入力された時
+		if (CheckHitKey(KEY_INPUT_F) == true)
+			if (PushNotesButton((*i)->GetNotesPos(), (*i)->GetNotesType(), 1) == true)
+				(*i)->SetDeleteFlg(true);
+		else
+			if (ReleaseNotesButton((*i)->GetNotesPos(), (*i)->GetNotesLength(), (*i)->GetNotesType(), 1) == true)
+				(*i)->SetDeleteFlg(true);
+
+		//J(3列目)が入力された時
+		if (CheckHitKey(KEY_INPUT_J) == true)
+			if (PushNotesButton((*i)->GetNotesPos(), (*i)->GetNotesType(), 2) == true)
+				(*i)->SetDeleteFlg(true);
+		else
+			if (ReleaseNotesButton((*i)->GetNotesPos(), (*i)->GetNotesLength(), (*i)->GetNotesType(), 2) == true)
+				(*i)->SetDeleteFlg(true);
+
+		//K(4列目)が入力された時
+		if (CheckHitKey(KEY_INPUT_K) == true)
+			if (PushNotesButton((*i)->GetNotesPos(), (*i)->GetNotesType(), 3) == true)
+				(*i)->SetDeleteFlg(true);
+		else
+			if (ReleaseNotesButton((*i)->GetNotesPos(), (*i)->GetNotesLength(), (*i)->GetNotesType(), 3) == true)
+				(*i)->SetDeleteFlg(true);
+
 		(*i)->Action();
 		(*i)->Draw();
 	}
+
+	//キーが押されていない場合、長押し制御解除
+	if (CheckHitKey(KEY_INPUT_D) == false)
+		longpush_ctrl[0] = false;
+	if (CheckHitKey(KEY_INPUT_F) == false)
+		longpush_ctrl[1] = false;
+	if (CheckHitKey(KEY_INPUT_J) == false)
+		longpush_ctrl[2] = false;
+	if (CheckHitKey(KEY_INPUT_K) == false)
+		longpush_ctrl[3] = false;
 
 	//ノーツのリストの整理
 	for (auto i = notes.begin(); i != notes.end(); i++)
@@ -80,25 +139,55 @@ void MusicGame::Action()
 //ドロー
 void MusicGame::Draw()
 {
+	//フレーム数表示
 	char time[256];
 	sprintf_s(time, 256, "%d", elapsed_flame);
 	DrawString(0, 0, time, GetColor(255, 0, 0));
 
-	DrawLine(60, 60, 420, 60, GetColor(255, 0, 0));
-	DrawLine(60, 240, 420, 240, GetColor(255, 0, 0));
-	DrawLine(60, 420, 420, 420, GetColor(255, 0, 0));
-	DrawLine(60, 600, 420, 600, GetColor(255, 0, 0));
-	DrawLine(60, 780, 420, 780, GetColor(255, 0, 0));
+	//横線
+	DrawLine(380, 60, 740, 60, GetColor(255, 0, 0));
+	DrawLine(380, 240, 740, 240, GetColor(255, 0, 0));
+	DrawLine(380, 420, 740, 420, GetColor(255, 0, 0));
+	DrawLine(380, 600, 740, 600, GetColor(255, 0, 0));
+	if (CheckHitKey(KEY_INPUT_D))
+		DrawLine(380, 780, 470, 780, GetColor(0, 255, 255));
+	else
+		DrawLine(380, 780, 470, 780, GetColor(255, 0, 0));
+	if (CheckHitKey(KEY_INPUT_F))
+		DrawLine(470, 780, 560, 780, GetColor(0, 255, 255));
+	else
+		DrawLine(470, 780, 560, 780, GetColor(255, 0, 0));
+	if (CheckHitKey(KEY_INPUT_J))
+		DrawLine(560, 780, 650, 780, GetColor(0, 255, 255));
+	else
+		DrawLine(560, 780, 650, 780, GetColor(255, 0, 0));
+	if (CheckHitKey(KEY_INPUT_K))
+		DrawLine(650, 780, 740, 780, GetColor(0, 255, 255));
+	else
+		DrawLine(650, 780, 740, 780, GetColor(255, 0, 0));
 
-	DrawLine(60, 0, 60, 840, GetColor(255, 0, 0));
-	DrawLine(150, 0, 150, 840, GetColor(255, 0, 0));
-	DrawLine(240, 0, 240, 840, GetColor(255, 0, 0));
-	DrawLine(330, 0, 330, 840, GetColor(255, 0, 0));
-	DrawLine(420, 0, 420, 840, GetColor(255, 0, 0));
+	//縦線
+	DrawLine(380, 0, 380, 840, GetColor(255, 0, 0));
+	DrawLine(470, 0, 470, 840, GetColor(255, 0, 0));
+	DrawLine(560, 0, 560, 840, GetColor(255, 0, 0));
+	DrawLine(650, 0, 650, 840, GetColor(255, 0, 0));
+	DrawLine(740, 0, 740, 840, GetColor(255, 0, 0));
+
+	//判定表示
+	for (int i = 0; i < 4; i++)
+	{
+		DrawString(390 + i * 90, 720, judg_txt[i], GetColor(255, 0, 0));
+		judg_txt_time[i]++;
+		if (judg_txt_time[i] > 15)
+		{
+			strcpy(judg_txt[i], "\0");
+			judg_txt_time[i] = 0;
+		}
+	}
 }
 
 //楽曲情報読み込み関数(引数　読み込むノーツデータの曲名)
-void MusicGame::LoadMusic(char music_name[])
+void MusicGame::LoadMusicNotes(char music_name[])
 {
 	FILE *fp;
 	char fname[256] = "NotesData\\";
@@ -131,4 +220,82 @@ void MusicGame::LoadMusic(char music_name[])
 
 	//ファイルを閉じる
 	fclose(fp);
+}
+
+//ノーツ入力処理
+bool MusicGame::PushNotesButton(Pos notes_pos, unsigned int notes_type, int line)
+{
+	if ((int)notes_pos.x - 380 == line * 90 && longpush_ctrl[line] == false)
+	{
+		//GOOD判定
+		if (notes_pos.y >= 780 - notes_speed * 2 &&
+			notes_pos.y <= 780 + notes_speed * 2 ||
+			notes_type == 3 &&
+			notes_pos.y >= 780 - notes_speed * 4 &&
+			notes_pos.y <= 780 + notes_speed * 4)
+		{
+			strcpy(judg_txt[line], "ＧＯＯＤ");
+			judg_txt_time[line] = 0;
+			if (notes_type != 2)
+				return true;
+		}
+		//NEAR判定
+		else if (notes_pos.y >= 780 - notes_speed * 4 &&
+			notes_pos.y <= 780 + notes_speed * 4)
+		{
+			strcpy(judg_txt[line], "ＮＥＡＲ");
+			judg_txt_time[line] = 0;
+			if (notes_type != 2)
+				return true;
+		}
+		//MISS判定
+		else if (notes_pos.y >= 780 - notes_speed * 6 &&
+			notes_pos.y <= 780 + notes_speed * 6)
+		{
+			strcpy(judg_txt[line], "ＭＩＳＳ");
+			judg_txt_time[line] = 0;
+			if (notes_type != 2)
+				return true;
+		}
+	}
+
+	longpush_ctrl[line] = true; //キー長押し制御
+
+	return false;
+}
+
+//ノーツ入力処理(ロングノーツ、キー離した時用)
+bool MusicGame::ReleaseNotesButton(Pos notes_pos, float notes_length, unsigned int notes_type, int line)
+{
+	if ((int)notes_pos.x-380 == line*90 && longpush_ctrl[line] == true && notes_type == 2)
+	{
+		//GOOD判定
+		if (notes_pos.y - notes_speed * notes_length >= 780 - notes_speed * 2 &&
+			notes_pos.y - notes_speed * notes_length <= 780 + notes_speed * 2)
+		{
+			strcpy(judg_txt[line], "ＧＯＯＤ");
+			judg_txt_time[line] = 0;
+			return true;
+		}
+		//NEAR判定
+		else if (notes_pos.y - notes_speed * notes_length >= 780 - notes_speed * 4 &&
+			notes_pos.y - notes_speed * notes_length <= 780 + notes_speed * 4)
+		{
+			strcpy(judg_txt[line], "ＮＥＡＲ");
+			judg_txt_time[line] = 0;
+			return true;
+		}
+		//MISS判定
+		else if (notes_pos.y - notes_speed * notes_length >= 780 - notes_speed * 6 &&
+			notes_pos.y - notes_speed * notes_length <= 780 + notes_speed * 6)
+		{
+			strcpy(judg_txt[line], "ＭＩＳＳ");
+			judg_txt_time[line] = 0;
+			return true;
+		}
+	}
+
+	longpush_ctrl[line] = false; //キー長押し制御
+
+	return false;
 }
