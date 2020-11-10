@@ -18,7 +18,16 @@ Notes::Notes(int lane, int speed, int type, float length)
 	notes_length = length;
 
 	//ノーツ削除フラグの設定
-	delete_flg = false;
+	delete_flg = false;	
+	
+	//通常ノーツ画像の読み込み
+	imgnotesN =LoadGraph("image\\notesN.png");
+
+	imgnotesL= LoadGraph("image\\notesL.png");
+
+	imgnotesS = LoadGraph("image\\notesS.png");
+
+
 }
 
 //アクション
@@ -33,17 +42,28 @@ void Notes::Action()
 
 //ドロー
 void Notes::Draw()
-{
+{		
+
 	switch (notes_type)
 	{
+
 	case 1:
-		DrawLine(pos.x, pos.y, pos.x + 90, pos.y, GetColor(0, 255, 0));
+		//通常ノーツ画像呼び出し
+		DrawGraph(pos.x, pos.y, imgnotesN, TRUE);
+
 		break;
 	case 2:
-		DrawBox(pos.x, pos.y - notes_speed * notes_length, pos.x + 90, pos.y, GetColor(255, 255, 0), TRUE);
+		DrawBox(pos.x, pos.y - notes_speed * notes_length, pos.x + 90, pos.y, GetColor(75, 75, 255), TRUE);
+
+		DrawGraph(pos.x, pos.y - notes_speed * notes_length, imgnotesL, TRUE);
+
+		DrawGraph(pos.x , pos.y, imgnotesL, TRUE);
+
 		break;
 	case 3:
-		DrawLine(pos.x, pos.y, pos.x + 90, pos.y, GetColor(255, 0, 255));
+		//スペシャルノーツ画像呼び出し
+		DrawGraph(pos.x, pos.y, imgnotesS, TRUE);
+
 		break;
 	default:
 		break;
