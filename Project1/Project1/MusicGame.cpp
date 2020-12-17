@@ -226,36 +226,37 @@ void MusicGame::Draw()
 void MusicGame::LoadMusicNotes(char music_name[])
 {
 	FILE *fp;
-	char fname[256] = "NotesData\\";
-	strcat(fname, music_name);
-	strcat(fname, ".csv");
-	int ret;
 
-	int flame = 0;
-	int lane = 0;
-	int type = 0;
-	float length = 0;
-
-	//ファイルを開く
-	fp = fopen(fname, "r");
-
-	//指定したファイルが見つからない場合
-	if (fp == NULL)
+	for (int i = 1;; i++)
 	{
-		fclose(fp); //ファイルを閉じる
-		return;
-	}
+		char fname[256];
+		sprintf(fname, "NotesData\\\%s_%d.csv", music_name, i);
+		int ret;
+		int flame = 0;
+		int lane = 0;
+		int type = 0;
+		float length = 0;
 
-	//ファイルから楽曲のノーツデータを読み込む
-	while ((ret = fscanf(fp, "%d,%d,%d,%f", &flame, &lane, &type, &length) != EOF))
-	{
-		//読み込んだデータを楽曲の出現ノーツ情報リストに登録
-		b = new MusicNotes{ flame,lane,type,length };
-		music.push_back(b);
-	}
+		//ファイルを開く
+		fp = fopen(fname, "r");
 
-	//ファイルを閉じる
-	fclose(fp);
+		//指定したファイルが見つからない場合
+		if (fp == NULL)
+		{
+			return;
+		}
+
+		//ファイルから楽曲のノーツデータを読み込む
+		while ((ret = fscanf(fp, "%d,%d,%d,%f", &flame, &lane, &type, &length) != EOF))
+		{
+			//読み込んだデータを楽曲の出現ノーツ情報リストに登録
+			b = new MusicNotes{ flame,lane,type,length };
+			music.push_back(b);
+		}
+
+		//ファイルを閉じる
+		fclose(fp);
+	}
 }
 
 //ノーツ入力処理
