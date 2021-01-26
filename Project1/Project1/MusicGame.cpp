@@ -60,8 +60,6 @@ MusicGame::MusicGame(char name[], int speed)
 	//ÉXÉRÉAèâä˙âª
 	score = 0;
 
-	//ëÃóÕèâä˙âª
-	life = 1000;
 }
 
 //ÉAÉNÉVÉáÉì
@@ -146,26 +144,20 @@ void MusicGame::Action()
 			break;
 		}
 	}
-
-	//if (life <=0)
-	//{
-
-	//}
 }
 
 //ÉhÉçÅ[
 void MusicGame::Draw()
 {
-	DrawExtendGraph(0, 0, 0 + 626*2, 0 + 417*2.1, backimg, TRUE);//ÉmÅ[ÉcÉâÉCÉìîwåi
+	DrawExtendGraph(0, 0, 640, 640, backimg, TRUE); //ÉmÅ[ÉcÉâÉCÉìîwåi
 
-	DrawExtendGraph(380, 0,380+626/1.73,0+417*2.1, img, TRUE);//ÉmÅ[ÉcÉâÉCÉìîwåi
+	DrawExtendGraph(140, 0, 500, 640, img, TRUE); //ÉmÅ[ÉcÉâÉCÉìîwåi
 
-		//ÉmÅ[ÉcÇÃï`âÊ
+	//ÉmÅ[ÉcÇÃï`âÊ
 	for (auto i = notes.begin(); i != notes.end(); i++)
 	{
 		(*i)->Draw();
 	}
-
 
 	//ÉtÉåÅ[ÉÄêîï\é¶
 	char time[256];
@@ -173,38 +165,37 @@ void MusicGame::Draw()
 	DrawString(0, 0, time, GetColor(255, 0, 0));
 
 	//â°ê¸
-	DrawLine(380, 60, 740, 60, GetColor(0, 0, 0));
-	DrawLine(380, 240, 740, 240, GetColor(0, 0, 0));
-	DrawLine(380, 420, 740, 420, GetColor(0, 0, 0));
-	DrawLine(380, 600, 740, 600, GetColor(0, 0, 0));
+	DrawLine(140, 60, 500, 60, GetColor(0, 0, 0));
+	DrawLine(140, 240, 500, 240, GetColor(0, 0, 0));
+	DrawLine(140, 420, 500, 420, GetColor(0, 0, 0));
 	if (CheckHitKey(KEY_INPUT_D))
-		DrawLine(380, 780, 470, 780, GetColor(0, 255, 255));
+		DrawLine(140, 600, 230, 600, GetColor(0, 255, 255));
 	else
-		DrawLine(380, 780, 470, 780, GetColor(0, 0, 0));
+		DrawLine(140, 600, 230, 600, GetColor(0, 0, 0));
 	if (CheckHitKey(KEY_INPUT_F))
-		DrawLine(470, 780, 560, 780, GetColor(0, 255, 255));
+		DrawLine(230, 600, 320, 600, GetColor(0, 255, 255));
 	else
-		DrawLine(470, 780, 560, 780, GetColor(0, 0, 0));
+		DrawLine(230, 600, 320, 600, GetColor(0, 0, 0));
 	if (CheckHitKey(KEY_INPUT_J))
-		DrawLine(560, 780, 650, 780, GetColor(0, 255, 255));
+		DrawLine(320, 600, 410, 600, GetColor(0, 255, 255));
 	else
-		DrawLine(560, 780, 650, 780, GetColor(0, 0, 0));
+		DrawLine(320, 600, 410, 600, GetColor(0, 0, 0));
 	if (CheckHitKey(KEY_INPUT_K))
-		DrawLine(650, 780, 740, 780, GetColor(0, 255, 255));
+		DrawLine(410, 600, 500, 600, GetColor(0, 255, 255));
 	else
-		DrawLine(650, 780, 740, 780, GetColor(0, 0, 0));
+		DrawLine(410, 600, 500, 600, GetColor(0, 0, 0));
 
 	//ècê¸
-	DrawLine(380, 0, 380, 840, GetColor(0, 0, 0));
-	DrawLine(470, 0, 470, 840, GetColor(0, 0, 0));
-	DrawLine(560, 0, 560, 840, GetColor(0, 0, 0));
-	DrawLine(650, 0, 650, 840, GetColor(0, 0, 0));
-	DrawLine(740, 0, 740, 840, GetColor(0, 0, 0));
+	DrawLine(140, 0, 140, 840, GetColor(0, 0, 0));
+	DrawLine(230, 0, 230, 840, GetColor(0, 0, 0));
+	DrawLine(320, 0, 320, 840, GetColor(0, 0, 0));
+	DrawLine(410, 0, 410, 840, GetColor(0, 0, 0));
+	DrawLine(500, 0, 500, 840, GetColor(0, 0, 0));
 
 	//îªíËï\é¶
 	for (int i = 0; i < 4; i++)
 	{
-		DrawString(390 + i * 90, 720, judg_txt[i], GetColor(255, 0, 0));
+		DrawString(152 + i * 90, 540, judg_txt[i], GetColor(255, 0, 0));
 		judg_txt_time[i]++;
 		if (judg_txt_time[i] > 15)
 		{
@@ -212,11 +203,9 @@ void MusicGame::Draw()
 			judg_txt_time[i] = 0;
 		}
 
-		DrawFormatString(100, 100, GetColor(0, 0, 0), "ÉRÉìÉ{\n%d", combo);
+		DrawFormatString(0, 32, GetColor(0, 0, 0), "ÉRÉìÉ{\n%d", combo);
 
-		DrawFormatString(200, 100, GetColor(0, 0, 0), "ÉXÉRÉA\n%d", score);
-	
-		DrawFormatString(100, 200, GetColor(0, 0, 0), "ÉâÉCÉt\n%d", life);
+		DrawFormatString(0, 80, GetColor(0, 0, 0), "ÉXÉRÉA\n%d", score);
 
 	}
 
@@ -262,14 +251,14 @@ void MusicGame::LoadMusicNotes(char music_name[])
 //ÉmÅ[Écì¸óÕèàóù
 bool MusicGame::PushNotesButton(Pos notes_pos, unsigned int notes_type, int line)
 {
-	if ((int)notes_pos.x - 380 == line * 90 && longpush_ctrl[line] == false)
+	if ((int)notes_pos.x - 140 == line * 90 && longpush_ctrl[line] == false)
 	{
 		//GOODîªíË
-		if (notes_pos.y >= 780 - notes_speed * 2 &&
-			notes_pos.y <= 780 + notes_speed * 2 ||
+		if (notes_pos.y >= 600 - notes_speed * 2 &&
+			notes_pos.y <= 600 + notes_speed * 2 ||
 			notes_type == 3 &&
-			notes_pos.y >= 780 - notes_speed * 4 &&
-			notes_pos.y <= 780 + notes_speed * 4)
+			notes_pos.y >= 600 - notes_speed * 4 &&
+			notes_pos.y <= 600 + notes_speed * 4)
 		{
 			strcpy(judg_txt[line], "ÇfÇnÇnÇc");
 			combo++;
@@ -279,8 +268,8 @@ bool MusicGame::PushNotesButton(Pos notes_pos, unsigned int notes_type, int line
 				return true;
 		}
 		//NEARîªíË
-		else if (notes_pos.y >= 780 - notes_speed * 4 &&
-			notes_pos.y <= 780 + notes_speed * 4)
+		else if (notes_pos.y >= 600 - notes_speed * 4 &&
+			notes_pos.y <= 600 + notes_speed * 4)
 		{
 			strcpy(judg_txt[line], "ÇmÇdÇ`Çq");
 			combo++;
@@ -290,12 +279,11 @@ bool MusicGame::PushNotesButton(Pos notes_pos, unsigned int notes_type, int line
 				return true;
 		}
 		//MISSîªíË
-		else if (notes_pos.y >= 780 - notes_speed * 6 &&
-			notes_pos.y <= 780 + notes_speed * 6)
+		else if (notes_pos.y >= 600 - notes_speed * 6 &&
+			notes_pos.y <= 600 + notes_speed * 6)
 		{
 			strcpy(judg_txt[line], "ÇlÇhÇrÇr");
 			combo = 0;
-			life -= 100;
 			judg_txt_time[line] = 0;
 			if (notes_type != 2)
 				return true;
@@ -310,11 +298,11 @@ bool MusicGame::PushNotesButton(Pos notes_pos, unsigned int notes_type, int line
 //ÉmÅ[Écì¸óÕèàóù(ÉçÉìÉOÉmÅ[ÉcÅAÉLÅ[ó£ÇµÇΩéûóp)
 bool MusicGame::ReleaseNotesButton(Pos notes_pos, float notes_length, unsigned int notes_type, int line)
 {
-	if ((int)notes_pos.x-380 == line*90 && longpush_ctrl[line] == true && notes_type == 2)
+	if ((int)notes_pos.x - 380 == line * 90 && longpush_ctrl[line] == true && notes_type == 2)
 	{
 		//GOODîªíË
-		if (notes_pos.y - notes_speed * notes_length >= 780 - notes_speed * 2 &&
-			notes_pos.y - notes_speed * notes_length <= 780 + notes_speed * 2)
+		if (notes_pos.y - notes_speed * notes_length >= 600 - notes_speed * 2 &&
+			notes_pos.y - notes_speed * notes_length <= 600 + notes_speed * 2)
 		{
 			strcpy(judg_txt[line], "ÇfÇnÇnÇc");			
 			combo++;
@@ -323,8 +311,8 @@ bool MusicGame::ReleaseNotesButton(Pos notes_pos, float notes_length, unsigned i
 			return true;
 		}
 		//NEARîªíË
-		else if (notes_pos.y - notes_speed * notes_length >= 780 - notes_speed * 4 &&
-			notes_pos.y - notes_speed * notes_length <= 780 + notes_speed * 4)
+		else if (notes_pos.y - notes_speed * notes_length >= 600 - notes_speed * 4 &&
+			notes_pos.y - notes_speed * notes_length <= 600 + notes_speed * 4)
 		{
 			strcpy(judg_txt[line], "ÇmÇdÇ`Çq");
 			combo++;
@@ -333,12 +321,11 @@ bool MusicGame::ReleaseNotesButton(Pos notes_pos, float notes_length, unsigned i
 			return true;
 		}
 		//MISSîªíË
-		else if (notes_pos.y - notes_speed * notes_length >= 780 - notes_speed * 6 &&
-			notes_pos.y - notes_speed * notes_length <= 780 + notes_speed * 6)
+		else if (notes_pos.y - notes_speed * notes_length >= 600 - notes_speed * 6 &&
+			notes_pos.y - notes_speed * notes_length <= 600 + notes_speed * 6)
 		{
 			strcpy(judg_txt[line], "ÇlÇhÇrÇr");
-			combo=0;
-			life -= 100;
+			combo = 0;
 			judg_txt_time[line] = 0;
 			return true;
 		}

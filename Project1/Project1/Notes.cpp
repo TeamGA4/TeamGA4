@@ -4,7 +4,7 @@
 Notes::Notes(int lane, int speed, int type, float length)
 {
 	//ノーツ出現レーン設定
-	pos.x = --lane * 90 + 380;
+	pos.x = --lane * 90 + 140;
 	pos.y = 780;
 	do { pos.y -= speed; } while (pos.y > 0);
 

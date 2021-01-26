@@ -6,7 +6,7 @@
 
 using namespace std;
 
-enum Scene game_scene = Musicgame;
+enum Scene game_scene = SceneMusicSelect;
 
 //メイン
 int WINAPI WinMain(HINSTANCE hInstance, 
@@ -26,9 +26,12 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	//描画先の変更
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	//クラスの作成
 	CharaSelect* charaselect = new CharaSelect();
 
-	char music_name[] = "Sample";
+	MusicSelect* music_select = new MusicSelect();
+
+	char music_name[] = "Battle";
 	MusicGame* music_game = new MusicGame(music_name, 5);
 
 	//メインループ
@@ -46,7 +49,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 			break;
 		}
 
-		case Musicgame:
+		case SceneMusicSelect:
+		{
+			music_select->Action();
+			music_select->Draw();
+			break;
+		}
+
+		case SceneMusicGame:
 		{
 			music_game->Action();
 			music_game->Draw();

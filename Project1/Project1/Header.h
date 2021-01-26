@@ -7,15 +7,18 @@
 using namespace std;
 
 //ウィンドウサイズ
-#define WINDOW_SIDE 1120
-#define WINDOW_VERTICAL 840
+#define WINDOW_SIDE 640
+#define WINDOW_VERTICAL 640
+
+//楽曲数
+#define MUSIC_COUNT 5
 
 //ゲームシーン
 enum Scene
 {
 	Charaselect,//キャラクター選択画面
-
-	Musicgame,//音ゲー部分
+	SceneMusicSelect,//楽曲選択画面
+	SceneMusicGame,//音ゲー部分
 };
 
 //座標データ
@@ -35,6 +38,19 @@ struct MusicNotes
 
 //60fpsで動作するようにする関数
 void wait_flame();
+
+//楽曲選択クラス
+class MusicSelect
+{
+private:
+	int background; //背景画像
+	char music_name[MUSIC_COUNT][256]; //楽曲名
+	unsigned char select; //選択中の楽曲情報
+public:
+	MusicSelect(); //コンストラクタ
+	void Action();
+	void Draw();
+};
 
 //楽曲クラス
 class MusicGame
@@ -56,8 +72,6 @@ private:
 	int combo;//コンボ用
 
 	int score;//スコア用
-
-	int life;//体力用
 
 public:
 	MusicGame(char name[], int speed); //コンストラクタ
