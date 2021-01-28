@@ -45,7 +45,14 @@ class MusicSelect
 private:
 	int background; //背景画像
 	char music_name[MUSIC_COUNT][256]; //楽曲名
-	unsigned char select; //選択中の楽曲情報
+
+	char pre_str[7][256]; //楽曲表示用の文字列変数
+	float pre_str_y; //楽曲表示用の座標Y変数
+	bool up_ani; //文字列上昇アニメーションフラグ
+	bool down_ani; //文字列下降アニメーションフラグ
+
+	unsigned char select_item; //選択中の項目情報
+	unsigned char select_music; //選択中の楽曲情報
 public:
 	MusicSelect(); //コンストラクタ
 	void Action();
