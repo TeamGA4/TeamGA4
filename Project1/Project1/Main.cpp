@@ -9,7 +9,7 @@ using namespace std;
 //グローバル変数定義
 bool push = false;
 enum Scene game_scene = SceneTitle;
-//Result* result = new Result();
+Result* result = new Result();
 
 //メイン
 int WINAPI WinMain(HINSTANCE hInstance, 
@@ -53,7 +53,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	MusicGame* music_game = new MusicGame("マ・メール・ロワ", 10);
 
-	Result* result = new Result();
+	result = new Result();
 
 	//メインループ
 	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
