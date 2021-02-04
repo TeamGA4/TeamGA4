@@ -120,7 +120,6 @@ void MusicGame::Action()
 			if (longpush_ctrl[0] == false)
 				if (PushNotesButton(pos, type, 0) == true)
 					(*i)->SetDeleteFlg(true);
-			longpush_ctrl[0] = true;
 		}
 		else
 		{
@@ -131,7 +130,6 @@ void MusicGame::Action()
 				if (PushNotesButton(pos, type, 0) == true)
 					(*i)->SetDeleteFlg(true);
 			}
-			longpush_ctrl[0] = false;
 		}
 
 		//F(2列目)が入力された時
@@ -140,7 +138,6 @@ void MusicGame::Action()
 			if (longpush_ctrl[1] == false)
 				if (PushNotesButton(pos, type, 1) == true)
 					(*i)->SetDeleteFlg(true);
-			longpush_ctrl[1] = true;
 		}	
 		else
 		{
@@ -151,7 +148,6 @@ void MusicGame::Action()
 				if (PushNotesButton(pos, type, 1) == true)
 					(*i)->SetDeleteFlg(true);
 			}
-			longpush_ctrl[1] = false;
 		}
 
 		//J(3列目)が入力された時
@@ -160,7 +156,6 @@ void MusicGame::Action()
 			if (longpush_ctrl[2] == false)
 				if (PushNotesButton(pos, type, 2) == true)
 					(*i)->SetDeleteFlg(true);
-			longpush_ctrl[2] = true;
 		}
 		else
 		{
@@ -171,7 +166,6 @@ void MusicGame::Action()
 				if (PushNotesButton(pos, type, 2) == true)
 					(*i)->SetDeleteFlg(true);
 			}
-			longpush_ctrl[2] = false;
 		}
 
 		//K(4列目)が入力された時
@@ -180,7 +174,6 @@ void MusicGame::Action()
 			if (longpush_ctrl[3] == false)
 				if (PushNotesButton(pos, type, 3) == true)
 					(*i)->SetDeleteFlg(true);
-			longpush_ctrl[3] = true;
 		}
 		else
 		{
@@ -191,7 +184,6 @@ void MusicGame::Action()
 				if (PushNotesButton(pos, type, 3) == true)
 					(*i)->SetDeleteFlg(true);
 			}
-			longpush_ctrl[3] = false;
 		}
 
 		//画面外に出た時の処理
@@ -207,6 +199,24 @@ void MusicGame::Action()
 
 		(*i)->Action();
 	}
+
+	//長押し制御
+	if (CheckHitKey(KEY_INPUT_D) == true)
+		longpush_ctrl[0] = true;
+	else
+		longpush_ctrl[0] = false;
+	if (CheckHitKey(KEY_INPUT_F) == true)
+		longpush_ctrl[1] = true;
+	else
+		longpush_ctrl[1] = false;
+	if (CheckHitKey(KEY_INPUT_J) == true)
+		longpush_ctrl[2] = true;
+	else
+		longpush_ctrl[2] = false;
+	if (CheckHitKey(KEY_INPUT_K) == true)
+		longpush_ctrl[3] = true;
+	else
+		longpush_ctrl[3] = false;
 
 	//ノーツのリストの整理
 	for (auto i = notes.begin(); i != notes.end(); i++)
