@@ -265,11 +265,11 @@ bool MusicGame::PushNotesButton(Pos notes_pos, unsigned int notes_type, int line
 	if ((int)notes_pos.x - 380 == line * 90 && longpush_ctrl[line] == false)
 	{
 		//GOOD”»’è
-		if (notes_pos.y >= 780 - notes_speed * 2 &&
+		if (notes_pos.y >= 780 - notes_speed * 0 &&
 			notes_pos.y <= 780 + notes_speed * 2 ||
 			notes_type == 3 &&
-			notes_pos.y >= 780 - notes_speed * 4 &&
-			notes_pos.y <= 780 + notes_speed * 4)
+			notes_pos.y >= 780 - notes_speed * 3 &&
+			notes_pos.y <= 780 + notes_speed * 3)
 		{
 			strcpy(judg_txt[line], "‚f‚n‚n‚c");
 			combo++;
@@ -279,8 +279,8 @@ bool MusicGame::PushNotesButton(Pos notes_pos, unsigned int notes_type, int line
 				return true;
 		}
 		//NEAR”»’è
-		else if (notes_pos.y >= 780 - notes_speed * 4 &&
-			notes_pos.y <= 780 + notes_speed * 4)
+		else if (notes_pos.y >= 780 - notes_speed * 0 &&
+			notes_pos.y <= 780 + notes_speed * 0)
 		{
 			strcpy(judg_txt[line], "‚m‚d‚`‚q");
 			combo++;
@@ -290,8 +290,8 @@ bool MusicGame::PushNotesButton(Pos notes_pos, unsigned int notes_type, int line
 				return true;
 		}
 		//MISS”»’è
-		else if (notes_pos.y >= 780 - notes_speed * 6 &&
-			notes_pos.y <= 780 + notes_speed * 6)
+		else if (notes_pos.y >= 780 - notes_speed * 0 &&
+			notes_pos.y <= 780 + notes_speed * 8)
 		{
 			strcpy(judg_txt[line], "‚l‚h‚r‚r");
 			combo = 0;

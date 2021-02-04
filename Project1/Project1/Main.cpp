@@ -28,8 +28,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	CharaSelect* charaselect = new CharaSelect();
 
-	char music_name[] = "Sample";
-	MusicGame* music_game = new MusicGame(music_name, 5);
+	char music_name[] = "マ・メール・ロワ";
+	MusicGame* music_game = new MusicGame(music_name, 10);
 
 	//メインループ
 	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
