@@ -35,9 +35,9 @@ void Notes::Action()
 {
 	pos.y += notes_speed;
 
-	if (pos.y > WINDOW_VERTICAL&&notes_type == 1 ||
+	/*if (pos.y > WINDOW_VERTICAL&&notes_type != 2 ||
 		pos.y - notes_speed * notes_length > WINDOW_VERTICAL&&notes_type == 2)
-		delete_flg = true;
+		delete_flg = true;*/
 }
 
 //ƒhƒ[

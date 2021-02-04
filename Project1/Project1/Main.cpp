@@ -6,7 +6,10 @@
 
 using namespace std;
 
-enum Scene game_scene = SceneMusicSelect;
+//グローバル変数定義
+bool push = false;
+enum Scene game_scene = SceneTitle;
+//Result* result = new Result();
 
 //メイン
 int WINAPI WinMain(HINSTANCE hInstance, 
@@ -23,16 +26,34 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	//dxライブラリ初期化
 	if (DxLib_Init() == -1) return -1; //エラーが起きたら終了
 
+	//フォントの読み込み
+	LPCSTR font_path = "font\\PixelMplus12-Regular.ttf";
+
+	if (AddFontResourceEx(font_path, FR_PRIVATE, NULL) > 0) {}
+	//フォント読込エラー処理
+	else
+		MessageBox(NULL, "フォント読込失敗", "", MB_OK);
+
+	//フォントの変更
+	ChangeFont("PixelMplus12", DX_CHARSET_DEFAULT);
+
 	//描画先の変更
 	SetDrawScreen(DX_SCREEN_BACK);
 
+	//BGMの読み込み
+	int bgm_menu;
+	bgm_menu = LoadSoundMem("Music\\menu.mp3");
+
 	//クラスの作成
-	CharaSelect* charaselect = new CharaSelect();
+	Title* title = new Title();
+
+	//CharaSelect* charaselect = new CharaSelect();
 
 	MusicSelect* music_select = new MusicSelect();
 
-	char music_name[] = "Battle";
-	MusicGame* music_game = new MusicGame(music_name, 5);
+	MusicGame* music_game = new MusicGame("マ・メール・ロワ", 5);
+
+	Result* result = new Result();
 
 	//メインループ
 	while (CheckHitKey(KEY_INPUT_ESCAPE) == 0)
@@ -42,15 +63,27 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 		switch (game_scene)
 		{
-		case Charaselect:
+		case SceneTitle:
+		{
+			if (CheckSoundMem(bgm_menu) == false)
+				PlaySoundMem(bgm_menu, DX_PLAYTYPE_BACK);
+
+			title->Action();
+			title->Draw();
+			break;
+		}
+		/*case Charaselect:
 		{
 			charaselect->Action();
 			charaselect->Draw();
 			break;
-		}
+		}*/
 
 		case SceneMusicSelect:
 		{
+			if (CheckSoundMem(bgm_menu) == false)
+				PlaySoundMem(bgm_menu, DX_PLAYTYPE_BACK);
+
 			music_select->Action();
 			music_select->Draw();
 			break;
@@ -58,8 +91,21 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 		case SceneMusicGame:
 		{
+			if (CheckSoundMem(bgm_menu) == true)
+				StopSoundMem(bgm_menu);
+
 			music_game->Action();
 			music_game->Draw();
+			break;
+		}
+
+		case SceneResult:
+		{
+			if (CheckSoundMem(bgm_menu) == false)
+				PlaySoundMem(bgm_menu, DX_PLAYTYPE_BACK);
+
+			result->Action();
+			result->Draw();
 			break;
 		}
 
