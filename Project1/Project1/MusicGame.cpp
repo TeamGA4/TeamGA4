@@ -96,7 +96,7 @@ void MusicGame::Action()
 	//ƒm[ƒc‚Ì¶¬
 	for (auto i = music.begin(); i != music.end(); i++)
 	{
-		if (elapsed_flame == (*i)->flame - 780 / notes_speed + 120)
+		if (elapsed_flame == (*i)->flame - 600 / notes_speed + 120)
 		{
 			a = new Notes((*i)->lane, notes_speed, (*i)->type, (*i)->length - (*i)->flame);
 			notes.push_back(a);
