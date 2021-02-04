@@ -124,13 +124,13 @@ private:
 	bool delete_flg; //消去フラグ
 
 	int imgnotesN;     //通常ノーツグラフィックハンドル
-	int notesN;        //通常ノーツグラフィック
+	//int notesN;        //通常ノーツグラフィック
 
 	int imgnotesL;     //ロングノーツグラフィックハンドル
-	int notesL;        //ロングノーツグラフィック
+	//int notesL;        //ロングノーツグラフィック
 
 	int imgnotesS;     //スペシャルノーツグラフィックハンドル
-	int notesS;        //スペシャルノーツグラフィック
+	//int notesS;        //スペシャルノーツグラフィック
 
 
 

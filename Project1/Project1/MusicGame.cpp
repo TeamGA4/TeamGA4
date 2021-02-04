@@ -87,6 +87,8 @@ void MusicGame::Action()
 
 		if (end_flame > 120)
 		{
+			result->SetMaxNotes(max_notes);
+			result->SetScore(score);
 			play_flg = false;
 			end_flame = 0;
 			game_scene = SceneResult;
