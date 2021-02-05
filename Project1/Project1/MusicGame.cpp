@@ -17,7 +17,7 @@ list<MusicNotes*>music;
 auto b = new MusicNotes{ 0,0,0,0 };
 
 //コンストラクタ(引数　曲名、ノーツ速度)
-MusicGame::MusicGame(char name[], int speed)
+MusicGame::MusicGame(char name[], int level, float speed)
 {
 	img = LoadGraph("image\\backnotes.jpg");//ノーツライン背景読み込み
 
@@ -41,8 +41,21 @@ MusicGame::MusicGame(char name[], int speed)
 	//総合ノーツ数初期化
 	max_notes = 0;
 
+	//リスト初期化
+	for (auto i = notes.begin(); i != notes.end();)
+	{
+		delete(*i); //オブジェクトを削除
+		i = notes.erase(i); //リストから削除＆リストの繋ぎ変え
+	}
+
+	for (auto i = music.begin(); i != music.end();)
+	{
+		delete(*i); //オブジェクトを削除
+		i = music.erase(i); //リストから削除＆リストの繋ぎ変え
+	}
+
 	//楽曲情報を読み込み
-	LoadMusicNotes(music_name);
+	LoadMusicNotes(music_name, level);
 
 	//判定のテキスト情報初期化
 	for (int i = 0; i < 4; i++)
@@ -62,7 +75,6 @@ MusicGame::MusicGame(char name[], int speed)
 
 	//スコア初期化
 	score = 0;
-
 }
 
 //アクション
@@ -320,18 +332,19 @@ void MusicGame::Draw()
 }
 
 //楽曲情報読み込み関数(引数　読み込むノーツデータの曲名)
-void MusicGame::LoadMusicNotes(char music_name[])
+void MusicGame::LoadMusicNotes(char music_name[], int level)
 {
 	FILE *fp;
 
 	char fname[256];
-	sprintf(fname, "NotesData\\\%s.csv", music_name);
-	/*if (level == 0)
+	sprintf(fname, "NotesData\\\%s", music_name);
+	if (level == 0)
 		strcat(fname, "_EASY");
 	else if (level == 1)
 		strcat(fname, "_NORMAL");
 	else
-		strcat(fname, "_HARD");*/
+		strcat(fname, "_HARD");
+	strcat(fname, ".csv");
 	int ret;
 	int flame = 0;
 	int lane = 0;

@@ -22,6 +22,7 @@ MusicSelect::MusicSelect()
 
 	select_music = 0;
 	select_level = 1;
+	select_speed = 1.0;
 
 	strcpy(pre_str[0], music_name[MUSIC_COUNT - 3]);
 	strcpy(pre_str[1], music_name[MUSIC_COUNT - 2]);
@@ -112,9 +113,26 @@ void MusicSelect::Action()
 		{
 			left_ani = true;
 		}
+		else if (MouseClick(528, 400, 48, 48, 0) == true)
+		{
+			if (select_speed >= 2.0)
+				select_speed = 1.0;
+			else
+				select_speed += 0.1;
+		}
+		else if (MouseClick(304, 400, 48, 48, 0) == true)
+		{
+			if (select_speed <= 1.0)
+				select_speed = 2.0;
+			else
+				select_speed -= 0.1;
+		}
 		else if (MouseClick(356, 520, 160, 64, 0) == true)
 		{
-			game_scene = SceneMusicGame;
+			strcpy(m_name, music_name[select_music]);
+			m_level = select_level;
+			m_speed = select_speed * 5;
+			game_scene = MusicDataSet;
 		}
 	}
 	
@@ -254,11 +272,14 @@ void MusicSelect::Draw()
 {
 	DrawGraph(0, 0, background, TRUE); //”wŒi•`‰æ
 
-	//“ïˆÕ“xƒeƒLƒXƒg•`‰æ
+	//“ïˆÕ“xƒeƒLƒXƒg•`‰æ(1)
 	SetFontSize(48);
-	DrawString(level_str_x - 192, 256, level_str[0], GetColor(255, 255, 255));
-	DrawString(level_str_x, 256, level_str[1], GetColor(255, 255, 255));
-	DrawString(level_str_x + 192, 256, level_str[2], GetColor(255, 255, 255));
+	DrawString(level_str_x - 192, 256, level_str[0], GetColor(255, 0, 0));
+	DrawString(level_str_x, 256, level_str[1], GetColor(255, 0, 0));
+	DrawString(level_str_x + 192, 256, level_str[2], GetColor(255, 0, 0));
+
+	//ƒm[ƒc‘¬“x•`‰æ
+	DrawFormatString(404, 400, GetColor(255, 0, 0), "%.1f", select_speed);
 
 	//”wŒi(2–‡–Ú)•`‰æ
 	DrawRectGraph(0, 0, 0, 0, 360, 640, background, TRUE, FALSE);
@@ -288,6 +309,10 @@ void MusicSelect::Draw()
 	DrawRectGraph(0, 0, 0, 0, 640, (WINDOW_VERTICAL - 32) / 2 - 54 * 3 + 40 + 64, background, TRUE, FALSE);
 	DrawRectGraph(0, (WINDOW_VERTICAL - 32) / 2 + 54 * 3 + 64, 0, (WINDOW_VERTICAL - 32) / 2 + 54 * 3 + 64, 640, 640, background, TRUE, FALSE);
 
+	//“ïˆÕ“xƒeƒLƒXƒg•`‰æ(2)
+	DrawString(404, 208, "LEVEL", GetColor(255, 255, 255));
+	DrawString(404, 352, "SPEED", GetColor(255, 255, 255));
+
 	//‚»‚Ì‘¼ƒeƒLƒXƒg•`‰æ
 	SetFontSize(64);
 	DrawString(128, 64, "MUSIC SELECT", GetColor(255, 255, 255));
@@ -310,4 +335,6 @@ void MusicSelect::Draw()
 		DrawGraph(304, 256, image_vec[7], TRUE);
 	else
 		DrawGraph(304, 256, image_vec[3], TRUE);
+	DrawGraph(528, 400, image_vec[2], TRUE);
+	DrawGraph(304, 400, image_vec[3], TRUE);
 }

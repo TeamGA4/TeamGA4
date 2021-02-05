@@ -19,6 +19,7 @@ enum Scene
 	//Charaselect,//キャラクター選択画面
 	SceneTitle,//タイトル
 	SceneMusicSelect,//楽曲選択画面
+	MusicDataSet, //楽曲情報設定処理
 	SceneMusicGame,//音ゲー部分
 	SceneResult,//リザルト画面
 };
@@ -76,6 +77,7 @@ private:
 	unsigned char select_item; //選択中の項目情報
 	unsigned char select_music; //選択中の楽曲情報
 	unsigned char select_level; //選択中の難易度(0=easy 1=normal 2=hard)
+	float select_speed; //選択中の速度
 public:
 	MusicSelect(); //コンストラクタ
 	void Action();
@@ -88,7 +90,7 @@ class MusicGame
 private:
 	char music_name[256]; //曲名
 	int sound; //楽曲の音声データ
-	int notes_speed; //ノーツ速度
+	float notes_speed; //ノーツ速度
 	int elapsed_flame; //楽曲経過時間(フレーム単位)
 	int max_notes; //楽曲の総合ノーツ数
 
@@ -105,10 +107,10 @@ private:
 	int score;//スコア用
 
 public:
-	MusicGame(char name[], int speed); //コンストラクタ
+	MusicGame(char name[], int level, float speed); //コンストラクタ
 	void Action(); //アクション
 	void Draw(); //ドロー
-	void LoadMusicNotes(char music_name[]); //楽曲情報読み込み関数(曲名,難易度(0=easy 1=normal 2=hard))
+	void LoadMusicNotes(char music_name[], int level); //楽曲情報読み込み関数(曲名,難易度(0=easy 1=normal 2=hard))
 	bool PushNotesButton(Pos notes_pos, unsigned int notes_type, int line); //ノーツ入力処理
 	//bool ReleaseNotesButton(Pos notes_pos, float notes_length, unsigned int notes_type, int line); //ノーツ入力処理(ロングノーツ、キー離した時用)
 };
@@ -175,3 +177,6 @@ public:
 extern bool push; //キー長押し制御
 extern enum Scene game_scene;
 extern Result* result;
+extern char m_name[256];
+extern int m_level;
+extern float m_speed;
