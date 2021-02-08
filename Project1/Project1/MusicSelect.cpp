@@ -134,6 +134,10 @@ void MusicSelect::Action()
 			m_speed = select_speed * 5;
 			game_scene = MusicDataSet;
 		}
+		else if (MouseClick(16, 568, 64, 64, 0) == true)
+		{
+			game_scene = SceneTitle;
+		}
 	}
 	
 
@@ -315,8 +319,9 @@ void MusicSelect::Draw()
 
 	//その他テキスト描画
 	SetFontSize(64);
-	DrawString(128, 64, "MUSIC SELECT", GetColor(255, 255, 255));
+	DrawString(128, 64, "MUSIC SELECT", GetColor(255, 255, 0));
 	DrawString(356, 520, "START", GetColor(0, 255, 0));
+	DrawString(16, 568, "←", GetColor(0, 255, 0));
 
 	//▲描画
 	if (up_ani == true)

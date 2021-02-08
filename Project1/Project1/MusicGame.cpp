@@ -240,6 +240,14 @@ void MusicGame::Action()
 			break;
 		}
 	}
+
+	//曲選択画面に戻る処理
+	if (MouseClick(16, 568, 64, 64, 0) == true)
+	{
+		play_flg = false;
+		StopSoundMem(sound);
+		game_scene = SceneMusicSelect;
+	}
 }
 
 //ドロー
@@ -249,8 +257,11 @@ void MusicGame::Draw()
 
 	DrawExtendGraph(140, 0, 500, 640, img, TRUE); //ノーツライン背景
 
-	//コンボ数描画
+	//戻るボタン描画
 	SetFontSize(64);
+	DrawString(16, 568, "←", GetColor(0, 255, 0));
+
+	//コンボ数描画
 	if (combo < 10)
 		DrawFormatString(306, 256, GetColor(255, 255, 255), "%d", combo);
 	else
