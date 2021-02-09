@@ -75,6 +75,9 @@ MusicGame::MusicGame(char name[], int level, float speed)
 
 	//スコア初期化
 	score = 0;
+
+	//READY初期化
+	ready_x = -320;
 }
 
 //アクション
@@ -88,8 +91,14 @@ void MusicGame::Action()
 		//経過時間加算
 		elapsed_flame++;
 
+		//READYテキスト処理
+		if (elapsed_flame <= 60 || elapsed_flame >= 120 && play_flg == false)
+		{
+			ready_x += 8;
+		}
+
 		//120フレーム(2秒)経過、かつ楽曲が再生されていない場合、再生する
-		if (CheckSoundMem(sound) == false && elapsed_flame > 120 && play_flg == false)
+		if (CheckSoundMem(sound) == false && elapsed_flame > 300 && play_flg == false)
 		{
 			PlaySoundMem(sound, DX_PLAYTYPE_BACK);
 			play_flg = true;
@@ -115,7 +124,7 @@ void MusicGame::Action()
 	//ノーツの生成
 	for (auto i = music.begin(); i != music.end(); i++)
 	{
-		if (elapsed_flame == (*i)->flame - 600 / notes_speed + 120)
+		if (elapsed_flame == (*i)->flame - 600 / notes_speed + 300)
 		{
 			a = new Notes((*i)->lane, notes_speed, (*i)->type, (*i)->length - (*i)->flame);
 			notes.push_back(a);
@@ -266,6 +275,9 @@ void MusicGame::Draw()
 	SetFontSize(64);
 	DrawString(16, 568, "←", GetColor(0, 255, 0));
 
+	//READY描画
+	DrawString(ready_x, 288, "ＲＥＡＤＹ", GetColor(0, 0, 255));
+
 	//コンボ数描画
 	if (combo < 10)
 		DrawFormatString(306, 256, GetColor(255, 255, 255), "%d", combo);
@@ -345,6 +357,13 @@ void MusicGame::Draw()
 		DrawFormatString(36, 240, GetColor(0, 0, 0), "%d", max_notes * 100 * 8 / 10);
 	else if (max_notes * 100 * 8 / 10 < 100000)
 		DrawFormatString(28, 240, GetColor(0, 0, 0), "%d", max_notes * 100 * 8 / 10);
+
+	//READYテキスト描画
+	if (CheckSoundMem(sound) == false)
+	{
+		SetFontSize(64);
+		DrawString(ready_x, 288, "ＲＥＡＤＹ", GetColor(255, 0, 255));
+	}
 }
 
 //楽曲情報読み込み関数(引数　読み込むノーツデータの曲名)

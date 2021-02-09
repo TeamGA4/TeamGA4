@@ -127,6 +127,8 @@ private:
 
 	int score;//スコア用
 
+	float ready_x;
+
 public:
 	MusicGame(char name[], int level, float speed); //コンストラクタ
 	void Action(); //アクション
