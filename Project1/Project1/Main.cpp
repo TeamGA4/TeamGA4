@@ -57,7 +57,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	MusicSelect* music_select = new MusicSelect();
 
-	MusicGame* music_game = new MusicGame("Sample", 0, 5);
+	MusicGame* music_game = new MusicGame("Battle", 0, 10);
 
 	result = new Result();
 
