@@ -9,6 +9,7 @@ using namespace std;
 //グローバル変数定義
 bool push = false;
 enum Scene game_scene = SceneTitle;
+FadeInOut* fade = new FadeInOut(); //フェードイン・フェードアウトクラス作成
 Result* result = new Result();
 char m_name[256];
 int m_level;
@@ -48,6 +49,8 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	bgm_menu = LoadSoundMem("Music\\menu.mp3");
 
 	//クラスの作成
+	fade = new FadeInOut();
+
 	Title* title = new Title();
 
 	//CharaSelect* charaselect = new CharaSelect();
@@ -122,6 +125,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		default:
 			break;
 		}
+
+		//フェードイン・フェードアウトアニメーション処理
+		fade->Action();
+		fade->Draw();
 
 		//画面の更新
 		ScreenFlip();

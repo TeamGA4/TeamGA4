@@ -75,42 +75,56 @@ MusicGame::MusicGame(char name[], int level, float speed)
 
 	//スコア初期化
 	score = 0;
+
+	//READY初期化
+	ready_x = -320;
 }
 
 //アクション
 void MusicGame::Action()
 {
-	//経過時間加算
-	elapsed_flame++;
-
-	//120フレーム(2秒)経過、かつ楽曲が再生されていない場合、再生する
 	static bool play_flg = false;
-	if (CheckSoundMem(sound) == false && elapsed_flame > 120 && play_flg == false)
-	{
-		PlaySoundMem(sound, DX_PLAYTYPE_BACK);
-		play_flg = true;
-	}
 
-	//楽曲終了処理
-	if (CheckSoundMem(sound) == false && play_flg == true)
+	//フェードアウト・フェードインアニメーション中は動作しない
+	if (fade->GetFadeFlg() == false)
 	{
-		static int end_flame = 0;
-		end_flame++;
+		//経過時間加算
+		elapsed_flame++;
 
-		if (end_flame > 120)
+		//READYテキスト処理
+		if (elapsed_flame <= 60 || elapsed_flame >= 120 && play_flg == false)
 		{
-			result->SetMaxNotes(max_notes);
-			result->SetScore(score);
-			play_flg = false;
-			end_flame = 0;
-			game_scene = SceneResult;
+			ready_x += 8;
+		}
+
+		//120フレーム(2秒)経過、かつ楽曲が再生されていない場合、再生する
+		if (CheckSoundMem(sound) == false && elapsed_flame > 300 && play_flg == false)
+		{
+			PlaySoundMem(sound, DX_PLAYTYPE_BACK);
+			play_flg = true;
+		}
+
+		//楽曲終了処理
+		if (CheckSoundMem(sound) == false && play_flg == true)
+		{
+			static int end_flame = 0;
+			end_flame++;
+
+			if (end_flame > 120)
+			{
+				result->SetMaxNotes(max_notes);
+				result->SetScore(score);
+				play_flg = false;
+				end_flame = 0;
+				fade->SetFadeoutFlg(SceneResult);
+			}
 		}
 	}
 
 	//ノーツの生成
 	for (auto i = music.begin(); i != music.end(); i++)
 	{
-		if (elapsed_flame == (*i)->flame - 600 / notes_speed + 120)
+		if (elapsed_flame == (*i)->flame - 600 / notes_speed + 300)
 		{
 			a = new Notes((*i)->lane, notes_speed, (*i)->type, (*i)->length - (*i)->flame);
 			notes.push_back(a);
@@ -240,17 +254,31 @@ void MusicGame::Action()
 			break;
 		}
 	}
+
+	//曲選択画面に戻る処理
+	if (MouseClick(16, 568, 64, 64, 0) == true)
+	{
+		play_flg = false;
+		StopSoundMem(sound);
+		fade->SetFadeoutFlg(SceneMusicSelect);
+	}
 }
 
 //ドロー
 void MusicGame::Draw()
 {
-	DrawExtendGraph(0, 0, 640, 640, backimg, TRUE); //ノーツライン背景
+	DrawGraph(0, 0, backimg, TRUE); //ノーツライン背景
 
 	DrawExtendGraph(140, 0, 500, 640, img, TRUE); //ノーツライン背景
 
-	//コンボ数描画
+	//戻るボタン描画
 	SetFontSize(64);
+	DrawString(16, 568, "←", GetColor(0, 255, 0));
+
+	//READY描画
+	DrawString(ready_x, 288, "ＲＥＡＤＹ", GetColor(0, 0, 255));
+
+	//コンボ数描画
 	if (combo < 10)
 		DrawFormatString(306, 256, GetColor(255, 255, 255), "%d", combo);
 	else
@@ -329,6 +357,13 @@ void MusicGame::Draw()
 		DrawFormatString(36, 240, GetColor(0, 0, 0), "%d", max_notes * 100 * 8 / 10);
 	else if (max_notes * 100 * 8 / 10 < 100000)
 		DrawFormatString(28, 240, GetColor(0, 0, 0), "%d", max_notes * 100 * 8 / 10);
+
+	//READYテキスト描画
+	if (CheckSoundMem(sound) == false)
+	{
+		SetFontSize(64);
+		DrawString(ready_x, 288, "ＲＥＡＤＹ", GetColor(255, 0, 255));
+	}
 }
 
 //楽曲情報読み込み関数(引数　読み込むノーツデータの曲名)

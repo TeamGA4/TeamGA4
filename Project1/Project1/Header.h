@@ -45,6 +45,27 @@ void wait_flame();
 //マウスクリック関数(左上の座標x,左上の座標y,範囲x,範囲y,クリック音声ID)
 bool MouseClick(float x, float y, float side, float vertical, int sound_id);
 
+//フェードイン・フェードアウトクラス
+class FadeInOut
+{
+private:
+	int img_panel;
+	bool fadeout_flg; //フェードアウト制御
+	bool fadein_flg; //フェードイン制御
+	enum Scene change_scene; //変更するシーン
+	bool panel[19][19]; //trueのパネルの座標は正方形で塗りつぶされる
+
+	//パネルが全て埋まったか、全て無くなったかチェックする関数(true=フェードイン、false=フェードアウト)
+	bool CheckAnimation(bool flg);
+
+public:
+	FadeInOut(); //コンストラクタ
+	void Action(); //アクション
+	void Draw(); //ドロー
+	void SetFadeoutFlg(enum Scene scene); //アニメーション再生制御関数
+	bool GetFadeFlg(); //現在アニメーションが再生されているかを返す関数
+};
+
 //タイトルクラス
 class Title
 {
@@ -105,6 +126,8 @@ private:
 	int combo;//コンボ用
 
 	int score;//スコア用
+
+	float ready_x;
 
 public:
 	MusicGame(char name[], int level, float speed); //コンストラクタ
@@ -176,6 +199,7 @@ public:
 //グローバル変数宣言
 extern bool push; //キー長押し制御
 extern enum Scene game_scene;
+extern FadeInOut* fade; //フェードイン・フェードアウトクラス
 extern Result* result;
 extern char m_name[256];
 extern int m_level;
