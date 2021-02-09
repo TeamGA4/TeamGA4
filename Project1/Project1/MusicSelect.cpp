@@ -48,49 +48,56 @@ MusicSelect::MusicSelect()
 //アクション
 void MusicSelect::Action()
 {
-	//入力処理(キーボード)
-	if (CheckHitKey(KEY_INPUT_UP) == true ||
-		CheckHitKey(KEY_INPUT_DOWN) == true ||
-		CheckHitKey(KEY_INPUT_RIGHT) == true ||
-		CheckHitKey(KEY_INPUT_LEFT) == true ||
-		CheckHitKey(KEY_INPUT_RETURN) == true)
+	//フェードアウト・フェードインアニメーション中は動作しない
+	if (fade->GetFadeFlg() == false)
 	{
-		if (push == false &&
-			up_ani == false && down_ani == false &&
-			right_ani == false && left_ani == false)
+		//入力処理(キーボード)
+		if (CheckHitKey(KEY_INPUT_UP) == true ||
+			CheckHitKey(KEY_INPUT_DOWN) == true ||
+			CheckHitKey(KEY_INPUT_RIGHT) == true ||
+			CheckHitKey(KEY_INPUT_LEFT) == true ||
+			CheckHitKey(KEY_INPUT_RETURN) == true)
 		{
-			//↑
-			if (CheckHitKey(KEY_INPUT_UP) == true)
+			if (push == false &&
+				up_ani == false && down_ani == false &&
+				right_ani == false && left_ani == false)
 			{
-				up_ani = true;
+				//↑
+				if (CheckHitKey(KEY_INPUT_UP) == true)
+				{
+					up_ani = true;
+				}
+				//↓
+				if (CheckHitKey(KEY_INPUT_DOWN) == true)
+				{
+					down_ani = true;
+				}
+				//→
+				if (CheckHitKey(KEY_INPUT_LEFT) == true)
+				{
+					left_ani = true;
+				}
+				//←
+				if (CheckHitKey(KEY_INPUT_RIGHT) == true)
+				{
+					right_ani = true;
+				}
+				//Enter
+				if (CheckHitKey(KEY_INPUT_RETURN) == true)
+				{
+					strcpy(m_name, music_name[select_music]);
+					m_level = select_level;
+					m_speed = select_speed * 5;
+					fade->SetFadeoutFlg(MusicDataSet);
+				}
 			}
-			//↓
-			if (CheckHitKey(KEY_INPUT_DOWN) == true)
-			{
-				down_ani = true;
-			}
-			//→
-			if (CheckHitKey(KEY_INPUT_LEFT) == true)
-			{
-				left_ani = true;
-			}
-			//←
-			if (CheckHitKey(KEY_INPUT_RIGHT) == true)
-			{
-				right_ani = true;
-			}
-			//Enter
-			if (CheckHitKey(KEY_INPUT_RETURN) == true)
-			{
-				game_scene = SceneMusicGame;
-			}
-		}
 
-		push = true; //長押し制御
-	}
-	else
-	{
-		push = false; //長尾し制御
+			push = true; //長押し制御
+		}
+		else
+		{
+			push = false; //長尾し制御
+		}
 	}
 	//入力処理(マウス)
 	if (push == false &&
@@ -132,7 +139,7 @@ void MusicSelect::Action()
 			strcpy(m_name, music_name[select_music]);
 			m_level = select_level;
 			m_speed = select_speed * 5;
-			game_scene = MusicDataSet;
+			fade->SetFadeoutFlg(MusicDataSet);
 		}
 		else if (MouseClick(16, 568, 64, 64, 0) == true)
 		{

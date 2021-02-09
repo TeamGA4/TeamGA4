@@ -80,30 +80,35 @@ MusicGame::MusicGame(char name[], int level, float speed)
 //アクション
 void MusicGame::Action()
 {
-	//経過時間加算
-	elapsed_flame++;
-
-	//120フレーム(2秒)経過、かつ楽曲が再生されていない場合、再生する
 	static bool play_flg = false;
-	if (CheckSoundMem(sound) == false && elapsed_flame > 120 && play_flg == false)
-	{
-		PlaySoundMem(sound, DX_PLAYTYPE_BACK);
-		play_flg = true;
-	}
 
-	//楽曲終了処理
-	if (CheckSoundMem(sound) == false && play_flg == true)
+	//フェードアウト・フェードインアニメーション中は動作しない
+	if (fade->GetFadeFlg() == false)
 	{
-		static int end_flame = 0;
-		end_flame++;
+		//経過時間加算
+		elapsed_flame++;
 
-		if (end_flame > 120)
+		//120フレーム(2秒)経過、かつ楽曲が再生されていない場合、再生する
+		if (CheckSoundMem(sound) == false && elapsed_flame > 120 && play_flg == false)
 		{
-			result->SetMaxNotes(max_notes);
-			result->SetScore(score);
-			play_flg = false;
-			end_flame = 0;
-			game_scene = SceneResult;
+			PlaySoundMem(sound, DX_PLAYTYPE_BACK);
+			play_flg = true;
+		}
+
+		//楽曲終了処理
+		if (CheckSoundMem(sound) == false && play_flg == true)
+		{
+			static int end_flame = 0;
+			end_flame++;
+
+			if (end_flame > 120)
+			{
+				result->SetMaxNotes(max_notes);
+				result->SetScore(score);
+				play_flg = false;
+				end_flame = 0;
+				fade->SetFadeoutFlg(SceneResult);
+			}
 		}
 	}
 
@@ -246,14 +251,14 @@ void MusicGame::Action()
 	{
 		play_flg = false;
 		StopSoundMem(sound);
-		game_scene = SceneMusicSelect;
+		fade->SetFadeoutFlg(SceneMusicSelect);
 	}
 }
 
 //ドロー
 void MusicGame::Draw()
 {
-	DrawExtendGraph(0, 0, 640, 640, backimg, TRUE); //ノーツライン背景
+	DrawGraph(0, 0, backimg, TRUE); //ノーツライン背景
 
 	DrawExtendGraph(140, 0, 500, 640, img, TRUE); //ノーツライン背景
 
