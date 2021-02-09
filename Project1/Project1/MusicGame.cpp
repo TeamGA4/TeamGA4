@@ -275,16 +275,16 @@ void MusicGame::Draw()
 	SetFontSize(64);
 	DrawString(16, 568, "©", GetColor(0, 255, 0));
 
-	//READY•`‰æ
-	DrawString(ready_x, 288, "‚q‚d‚`‚c‚x", GetColor(0, 0, 255));
-
 	//ƒRƒ“ƒ{”•`‰æ
-	if (combo < 10)
-		DrawFormatString(306, 256, GetColor(255, 255, 255), "%d", combo);
-	else
-		DrawFormatString(290, 256, GetColor(255, 255, 255), "%d", combo);
-	SetFontSize(32);
-	DrawFormatString(278, 320, GetColor(255, 255, 255), "COMBO", combo);
+	if (ready_x >= 640)
+	{
+		if (combo < 10)
+			DrawFormatString(306, 256, GetColor(255, 255, 255), "%d", combo);
+		else
+			DrawFormatString(290, 256, GetColor(255, 255, 255), "%d", combo);
+		SetFontSize(32);
+		DrawFormatString(278, 320, GetColor(255, 255, 255), "COMBO", combo);
+	}
 
 	//ƒm[ƒc‚Ì•`‰æ
 	for (auto i = notes.begin(); i != notes.end(); i++)
@@ -302,19 +302,19 @@ void MusicGame::Draw()
 	DrawLine(140, 240, 500, 240, GetColor(0, 0, 0));
 	DrawLine(140, 420, 500, 420, GetColor(0, 0, 0));
 	if (CheckHitKey(KEY_INPUT_D))
-		DrawLine(140, 600, 230, 600, GetColor(0, 255, 255));
+		DrawLine(140, 600, 230, 600, GetColor(0, 255, 0));
 	else
 		DrawLine(140, 600, 230, 600, GetColor(0, 0, 0));
 	if (CheckHitKey(KEY_INPUT_F))
-		DrawLine(230, 600, 320, 600, GetColor(0, 255, 255));
+		DrawLine(230, 600, 320, 600, GetColor(0, 255, 0));
 	else
 		DrawLine(230, 600, 320, 600, GetColor(0, 0, 0));
 	if (CheckHitKey(KEY_INPUT_J))
-		DrawLine(320, 600, 410, 600, GetColor(0, 255, 255));
+		DrawLine(320, 600, 410, 600, GetColor(0, 255, 0));
 	else
 		DrawLine(320, 600, 410, 600, GetColor(0, 0, 0));
 	if (CheckHitKey(KEY_INPUT_K))
-		DrawLine(410, 600, 500, 600, GetColor(0, 255, 255));
+		DrawLine(410, 600, 500, 600, GetColor(0, 255, 0));
 	else
 		DrawLine(410, 600, 500, 600, GetColor(0, 0, 0));
 
@@ -362,7 +362,7 @@ void MusicGame::Draw()
 	if (CheckSoundMem(sound) == false)
 	{
 		SetFontSize(64);
-		DrawString(ready_x, 288, "‚q‚d‚`‚c‚x", GetColor(255, 0, 255));
+		DrawString(ready_x, 288, "‚q‚d‚`‚c‚x", GetColor(255, 0, 0));
 	}
 }
 
