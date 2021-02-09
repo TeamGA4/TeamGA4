@@ -57,7 +57,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 
 	MusicSelect* music_select = new MusicSelect();
 
-	MusicGame* music_game = new MusicGame("Battle", 0, 10);
+	MusicGame* music_game = new MusicGame("マ・メール・ロワ", 0, 5);
 
 	result = new Result();
 
@@ -91,7 +91,7 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				PlaySoundMem(bgm_menu, DX_PLAYTYPE_BACK);
 
 			music_select->Action();
-			music_select->Draw();
+			music_select->Draw();	
 			break;
 		}
 
