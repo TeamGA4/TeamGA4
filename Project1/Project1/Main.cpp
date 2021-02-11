@@ -9,7 +9,11 @@ using namespace std;
 //グローバル変数定義
 bool push = false;
 enum Scene game_scene = SceneTitle;
+FadeInOut* fade = new FadeInOut(); //フェードイン・フェードアウトクラス作成
 Result* result = new Result();
+char m_name[256];
+int m_level;
+float m_speed;
 
 //メイン
 int WINAPI WinMain(HINSTANCE hInstance, 
@@ -45,13 +49,15 @@ int WINAPI WinMain(HINSTANCE hInstance,
 	bgm_menu = LoadSoundMem("Music\\menu.mp3");
 
 	//クラスの作成
+	fade = new FadeInOut();
+
 	Title* title = new Title();
 
 	//CharaSelect* charaselect = new CharaSelect();
 
 	MusicSelect* music_select = new MusicSelect();
 
-	MusicGame* music_game = new MusicGame("マ・メール・ロワ", 5);
+	MusicGame* music_game = new MusicGame("マ・メール・ロワ", 0, 5);
 
 	result = new Result();
 
@@ -85,7 +91,14 @@ int WINAPI WinMain(HINSTANCE hInstance,
 				PlaySoundMem(bgm_menu, DX_PLAYTYPE_BACK);
 
 			music_select->Action();
-			music_select->Draw();
+			music_select->Draw();	
+			break;
+		}
+
+		case MusicDataSet:
+		{
+			music_game = new MusicGame(m_name, m_level, m_speed);
+			game_scene = SceneMusicGame;
 			break;
 		}
 
@@ -112,6 +125,10 @@ int WINAPI WinMain(HINSTANCE hInstance,
 		default:
 			break;
 		}
+
+		//フェードイン・フェードアウトアニメーション処理
+		fade->Action();
+		fade->Draw();
 
 		//画面の更新
 		ScreenFlip();

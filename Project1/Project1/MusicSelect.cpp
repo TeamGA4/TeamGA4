@@ -22,6 +22,7 @@ MusicSelect::MusicSelect()
 
 	select_music = 0;
 	select_level = 1;
+	select_speed = 1.0;
 
 	strcpy(pre_str[0], music_name[MUSIC_COUNT - 3]);
 	strcpy(pre_str[1], music_name[MUSIC_COUNT - 2]);
@@ -47,49 +48,56 @@ MusicSelect::MusicSelect()
 //アクション
 void MusicSelect::Action()
 {
-	//入力処理(キーボード)
-	if (CheckHitKey(KEY_INPUT_UP) == true ||
-		CheckHitKey(KEY_INPUT_DOWN) == true ||
-		CheckHitKey(KEY_INPUT_RIGHT) == true ||
-		CheckHitKey(KEY_INPUT_LEFT) == true ||
-		CheckHitKey(KEY_INPUT_RETURN) == true)
+	//フェードアウト・フェードインアニメーション中は動作しない
+	if (fade->GetFadeFlg() == false)
 	{
-		if (push == false &&
-			up_ani == false && down_ani == false &&
-			right_ani == false && left_ani == false)
+		//入力処理(キーボード)
+		if (CheckHitKey(KEY_INPUT_UP) == true ||
+			CheckHitKey(KEY_INPUT_DOWN) == true ||
+			CheckHitKey(KEY_INPUT_RIGHT) == true ||
+			CheckHitKey(KEY_INPUT_LEFT) == true ||
+			CheckHitKey(KEY_INPUT_RETURN) == true)
 		{
-			//↑
-			if (CheckHitKey(KEY_INPUT_UP) == true)
+			if (push == false &&
+				up_ani == false && down_ani == false &&
+				right_ani == false && left_ani == false)
 			{
-				up_ani = true;
+				//↑
+				if (CheckHitKey(KEY_INPUT_UP) == true)
+				{
+					up_ani = true;
+				}
+				//↓
+				if (CheckHitKey(KEY_INPUT_DOWN) == true)
+				{
+					down_ani = true;
+				}
+				//→
+				if (CheckHitKey(KEY_INPUT_LEFT) == true)
+				{
+					left_ani = true;
+				}
+				//←
+				if (CheckHitKey(KEY_INPUT_RIGHT) == true)
+				{
+					right_ani = true;
+				}
+				//Enter
+				if (CheckHitKey(KEY_INPUT_RETURN) == true)
+				{
+					strcpy(m_name, music_name[select_music]);
+					m_level = select_level;
+					m_speed = select_speed * 5;
+					fade->SetFadeoutFlg(MusicDataSet);
+				}
 			}
-			//↓
-			if (CheckHitKey(KEY_INPUT_DOWN) == true)
-			{
-				down_ani = true;
-			}
-			//→
-			if (CheckHitKey(KEY_INPUT_LEFT) == true)
-			{
-				left_ani = true;
-			}
-			//←
-			if (CheckHitKey(KEY_INPUT_RIGHT) == true)
-			{
-				right_ani = true;
-			}
-			//Enter
-			if (CheckHitKey(KEY_INPUT_RETURN) == true)
-			{
-				game_scene = SceneMusicGame;
-			}
-		}
 
-		push = true; //長押し制御
-	}
-	else
-	{
-		push = false; //長尾し制御
+			push = true; //長押し制御
+		}
+		else
+		{
+			push = false; //長尾し制御
+		}
 	}
 	//入力処理(マウス)
 	if (push == false &&
@@ -112,9 +120,30 @@ void MusicSelect::Action()
 		{
 			left_ani = true;
 		}
+		else if (MouseClick(528, 400, 48, 48, 0) == true)
+		{
+			if (select_speed >= 2.0)
+				select_speed = 1.0;
+			else
+				select_speed += 0.1;
+		}
+		else if (MouseClick(304, 400, 48, 48, 0) == true)
+		{
+			if (select_speed <= 1.0)
+				select_speed = 2.0;
+			else
+				select_speed -= 0.1;
+		}
 		else if (MouseClick(356, 520, 160, 64, 0) == true)
 		{
-			game_scene = SceneMusicGame;
+			strcpy(m_name, music_name[select_music]);
+			m_level = select_level;
+			m_speed = select_speed * 5;
+			fade->SetFadeoutFlg(MusicDataSet);
+		}
+		else if (MouseClick(16, 568, 64, 64, 0) == true)
+		{
+			game_scene = SceneTitle;
 		}
 	}
 	
@@ -254,11 +283,14 @@ void MusicSelect::Draw()
 {
 	DrawGraph(0, 0, background, TRUE); //背景描画
 
-	//難易度テキスト描画
+	//難易度テキスト描画(1)
 	SetFontSize(48);
-	DrawString(level_str_x - 192, 256, level_str[0], GetColor(255, 255, 255));
-	DrawString(level_str_x, 256, level_str[1], GetColor(255, 255, 255));
-	DrawString(level_str_x + 192, 256, level_str[2], GetColor(255, 255, 255));
+	DrawString(level_str_x - 192, 256, level_str[0], GetColor(255, 0, 0));
+	DrawString(level_str_x, 256, level_str[1], GetColor(255, 0, 0));
+	DrawString(level_str_x + 192, 256, level_str[2], GetColor(255, 0, 0));
+
+	//ノーツ速度描画
+	DrawFormatString(404, 400, GetColor(255, 0, 0), "%.1f", select_speed);
 
 	//背景(2枚目)描画
 	DrawRectGraph(0, 0, 0, 0, 360, 640, background, TRUE, FALSE);
@@ -288,10 +320,15 @@ void MusicSelect::Draw()
 	DrawRectGraph(0, 0, 0, 0, 640, (WINDOW_VERTICAL - 32) / 2 - 54 * 3 + 40 + 64, background, TRUE, FALSE);
 	DrawRectGraph(0, (WINDOW_VERTICAL - 32) / 2 + 54 * 3 + 64, 0, (WINDOW_VERTICAL - 32) / 2 + 54 * 3 + 64, 640, 640, background, TRUE, FALSE);
 
+	//難易度テキスト描画(2)
+	DrawString(404, 208, "LEVEL", GetColor(255, 255, 255));
+	DrawString(404, 352, "SPEED", GetColor(255, 255, 255));
+
 	//その他テキスト描画
 	SetFontSize(64);
-	DrawString(128, 64, "MUSIC SELECT", GetColor(255, 255, 255));
+	DrawString(128, 64, "MUSIC SELECT", GetColor(255, 255, 0));
 	DrawString(356, 520, "START", GetColor(0, 255, 0));
+	DrawString(16, 568, "←", GetColor(0, 255, 0));
 
 	//▲描画
 	if (up_ani == true)
@@ -310,4 +347,6 @@ void MusicSelect::Draw()
 		DrawGraph(304, 256, image_vec[7], TRUE);
 	else
 		DrawGraph(304, 256, image_vec[3], TRUE);
+	DrawGraph(528, 400, image_vec[2], TRUE);
+	DrawGraph(304, 400, image_vec[3], TRUE);
 }

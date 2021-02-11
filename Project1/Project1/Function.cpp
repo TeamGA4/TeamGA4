@@ -17,8 +17,8 @@ void wait_flame()
 bool MouseClick(float x, float y, float side, float vertical, int sound_id)
 {
 	//フェードアウト・フェードインアニメーション中は動作しない
-	//if (fade->GetFadeFlg() == false)
-	//{
+	if (fade->GetFadeFlg() == false)
+	{
 		//クリックを押した時の座標と、離した時の座標が共に選択範囲内にあればtrueを返す
 		//それ以外はfalseを返す
 
@@ -68,7 +68,7 @@ bool MouseClick(float x, float y, float side, float vertical, int sound_id)
 				return true;
 			}
 		}
-	//}
+	}
 
 	return false;
 }

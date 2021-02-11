@@ -19,6 +19,7 @@ enum Scene
 	//Charaselect,//キャラクター選択画面
 	SceneTitle,//タイトル
 	SceneMusicSelect,//楽曲選択画面
+	MusicDataSet, //楽曲情報設定処理
 	SceneMusicGame,//音ゲー部分
 	SceneResult,//リザルト画面
 };
@@ -43,6 +44,27 @@ void wait_flame();
 
 //マウスクリック関数(左上の座標x,左上の座標y,範囲x,範囲y,クリック音声ID)
 bool MouseClick(float x, float y, float side, float vertical, int sound_id);
+
+//フェードイン・フェードアウトクラス
+class FadeInOut
+{
+private:
+	int img_panel;
+	bool fadeout_flg; //フェードアウト制御
+	bool fadein_flg; //フェードイン制御
+	enum Scene change_scene; //変更するシーン
+	bool panel[19][19]; //trueのパネルの座標は正方形で塗りつぶされる
+
+	//パネルが全て埋まったか、全て無くなったかチェックする関数(true=フェードイン、false=フェードアウト)
+	bool CheckAnimation(bool flg);
+
+public:
+	FadeInOut(); //コンストラクタ
+	void Action(); //アクション
+	void Draw(); //ドロー
+	void SetFadeoutFlg(enum Scene scene); //アニメーション再生制御関数
+	bool GetFadeFlg(); //現在アニメーションが再生されているかを返す関数
+};
 
 //タイトルクラス
 class Title
@@ -76,6 +98,7 @@ private:
 	unsigned char select_item; //選択中の項目情報
 	unsigned char select_music; //選択中の楽曲情報
 	unsigned char select_level; //選択中の難易度(0=easy 1=normal 2=hard)
+	float select_speed; //選択中の速度
 public:
 	MusicSelect(); //コンストラクタ
 	void Action();
@@ -88,7 +111,7 @@ class MusicGame
 private:
 	char music_name[256]; //曲名
 	int sound; //楽曲の音声データ
-	int notes_speed; //ノーツ速度
+	float notes_speed; //ノーツ速度
 	int elapsed_flame; //楽曲経過時間(フレーム単位)
 	int max_notes; //楽曲の総合ノーツ数
 
@@ -104,11 +127,13 @@ private:
 
 	int score;//スコア用
 
+	float ready_x;
+
 public:
-	MusicGame(char name[], int speed); //コンストラクタ
+	MusicGame(char name[], int level, float speed); //コンストラクタ
 	void Action(); //アクション
 	void Draw(); //ドロー
-	void LoadMusicNotes(char music_name[]); //楽曲情報読み込み関数(曲名,難易度(0=easy 1=normal 2=hard))
+	void LoadMusicNotes(char music_name[], int level); //楽曲情報読み込み関数(曲名,難易度(0=easy 1=normal 2=hard))
 	bool PushNotesButton(Pos notes_pos, unsigned int notes_type, int line); //ノーツ入力処理
 	//bool ReleaseNotesButton(Pos notes_pos, float notes_length, unsigned int notes_type, int line); //ノーツ入力処理(ロングノーツ、キー離した時用)
 };
@@ -174,4 +199,8 @@ public:
 //グローバル変数宣言
 extern bool push; //キー長押し制御
 extern enum Scene game_scene;
+extern FadeInOut* fade; //フェードイン・フェードアウトクラス
 extern Result* result;
+extern char m_name[256];
+extern int m_level;
+extern float m_speed;
